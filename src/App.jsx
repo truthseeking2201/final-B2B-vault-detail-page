@@ -577,7 +577,19 @@ function TokenRow({ label, tokens }) {
 function TokenCluster({ label, token }) {
   return (
     <div className="flex flex-col gap-2 flex-shrink-0">
-      <span className="text-base font-semibold text-gray-400 leading-none">{label}</span>
+      <span
+        className="leading-[20px]"
+        style={{
+          color: '#94969C',
+          fontFamily: 'Work Sans',
+          fontSize: '14px',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          lineHeight: '20px',
+        }}
+      >
+        {label}
+      </span>
       <div className="flex items-center gap-2 text-lg font-semibold text-white">
         <TokenIcon
           label={token.name.charAt(0)}
