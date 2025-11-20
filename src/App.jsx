@@ -1360,10 +1360,54 @@ function PositionsSection() {
 
   return (
     <section className="mt-6 space-y-4">
+      <StatsStrip />
       <AllTimePnLCard />
       <LpBreakdownCard donutStyle={donutStyle} />
       <CashflowCard />
     </section>
+  )
+}
+
+function StatsStrip() {
+  return (
+    <div className="flex flex-wrap items-center gap-8 text-white">
+      <div className="flex items-center gap-3">
+        <div
+          className="relative grid place-items-center"
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: '50%',
+            background:
+              'conic-gradient(#f7931a 0deg 250deg, #2b2c31 250deg 360deg)',
+          }}
+        >
+          <div className="absolute inset-[6px] rounded-full bg-[#101015]" />
+        </div>
+        <div>
+          <p className="text-[13px] text-[#aeb3c1]">Total Liquidity</p>
+          <p className="text-[20px] font-semibold leading-[24px]">$4,926.00</p>
+          <p className="text-[12px] text-[#8f95a6]">≈ $5,216.00</p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <div
+          className="grid place-items-center rounded-full"
+          style={{
+            width: 32,
+            height: 32,
+            background: '#0f141d',
+            border: '2px solid #1f2a3a',
+          }}
+        />
+        <div>
+          <p className="text-[13px] text-[#aeb3c1]">Break-even</p>
+          <p className="text-[20px] font-semibold leading-[24px]">$1.00</p>
+          <p className="text-[12px] text-[#8f95a6]">Current Vault Share price: $1.12</p>
+        </div>
+      </div>
+    </div>
   )
 }
 
