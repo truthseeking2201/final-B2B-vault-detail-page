@@ -1048,10 +1048,21 @@ function GearIcon() {
 
 function InfoCircle() {
   return (
-    <svg viewBox="0 0 16 16" fill="none" className="h-4 w-4 text-[#8b8f9b]">
-      <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2" />
-      <path d="M8 11V7.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <circle cx="8" cy="5" r=".75" fill="currentColor" />
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M5 6.49998C5.21473 6.78705 5.48868 7.02457 5.80328 7.19645C6.11787 7.36833 6.46575 7.47054 6.82333 7.49615C7.1809 7.52176 7.53979 7.47017 7.87567 7.34487C8.21155 7.21958 8.51656 7.02352 8.77 6.76998L10.27 5.26998C10.7254 4.79848 10.9774 4.16697 10.9717 3.51148C10.966 2.85599 10.7031 2.22896 10.2395 1.76544C9.77603 1.30192 9.14899 1.03899 8.4935 1.0333C7.83801 1.0276 7.20651 1.27959 6.735 1.73498L5.875 2.58998"
+        stroke="white"
+        strokeOpacity="0.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6.99912 5.5006C6.7844 5.21354 6.51044 4.97601 6.19585 4.80413C5.88125 4.63225 5.53337 4.53004 5.1758 4.50443C4.81823 4.47883 4.45933 4.53042 4.12345 4.65571C3.78757 4.781 3.48257 4.97707 3.22912 5.2306L1.72912 6.7306C1.27373 7.20211 1.02174 7.83361 1.02744 8.4891C1.03313 9.1446 1.29606 9.77163 1.75958 10.2351C2.2231 10.6987 2.85013 10.9616 3.50562 10.9673C4.16111 10.973 4.79262 10.721 5.26412 10.2656L6.11912 9.4106"
+        stroke="white"
+        strokeOpacity="0.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
@@ -1328,23 +1339,8 @@ function PositionsSection() {
   )
 
   return (
-    <section className="mt-6 space-y-4 rounded-2xl border border-border bg-panelMuted p-5 shadow-panel">
-      <div className="space-y-4">
-        <QuickStat
-          title="Total Liquidity"
-          value="4,926.00"
-          helper="≈ $5,216.00"
-          ringColor="#f7931a"
-        />
-        <QuickStat
-          title="Break-even"
-          value="$1.00"
-          helper="Current NDLP share price: $1.12"
-          ringColor="#3ab4ff"
-        />
-      </div>
-
-      <div className="rounded-2xl border border-border bg-panelMuted">
+    <section className="mt-6 space-y-4">
+      <div className="rounded-2xl border border-border bg-panelMuted p-5">
         <div className="border-b border-border px-5 py-4">
           <p className="text-lg font-semibold text-white">All Time P&amp;L Breakdown</p>
         </div>
@@ -1589,22 +1585,6 @@ function TokenSelectModal({ tokens, selected, onSelect, onClose }) {
             </button>
           ))}
         </div>
-      </div>
-    </div>
-  )
-}
-
-function QuickStat({ title, value, helper, ringColor }) {
-  return (
-    <div className="rounded-2xl border border-border bg-panelMuted px-4 py-3 flex items-center gap-4">
-      <div
-        className="h-12 w-12 rounded-full border-[6px]"
-        style={{ borderColor: ringColor }}
-      />
-      <div>
-        <p className="text-sm text-muted">{title}</p>
-        <p className="stat-highlight">{value}</p>
-        <p className="text-sm text-muted">{helper}</p>
       </div>
     </div>
   )
