@@ -187,8 +187,8 @@ function App() {
 
 function TopBanner() {
   return (
-    <div className="bg-gradient-to-r from-[#0052f3] via-[#0f63f6] to-[#00a0ff] text-white text-sm text-center py-2 px-4">
-      <span className="inline-flex items-center justify-center gap-2 font-medium">
+    <div className="bg-gradient-to-r from-[#0052f3] via-[#0f63f6] to-[#00a0ff] px-4 py-2 text-center text-xs text-white sm:text-sm">
+      <span className="mx-auto flex max-w-screen-sm flex-wrap items-center justify-center gap-2 font-medium">
         <span role="img" aria-label="gift">
           🎁
         </span>
@@ -309,7 +309,7 @@ function VaultHeader({ currency, setCurrency }) {
 function VaultTabs({ mode, section, onModeChange, onSectionChange }) {
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-6 text-base font-semibold text-gray-300">
+      <div className="flex flex-wrap items-center gap-3 text-base font-semibold text-gray-300 sm:gap-6">
         {['vault', 'positions'].map((item) => (
           <button
             key={item}
@@ -331,7 +331,7 @@ function VaultTabs({ mode, section, onModeChange, onSectionChange }) {
 function SectionTabs({ section, onSectionChange }) {
   if (!section) return null
   return (
-    <div className="flex items-center gap-5 text-sm font-semibold text-gray-300">
+    <div className="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-300 sm:gap-5">
       {[
         ['overview', 'Overview'],
         ['risk', 'Risk'],
@@ -385,18 +385,18 @@ function VaultHero() {
           conditions. We call this the “dual engine.”
         </p>
         <hr className="w-full border-t border-border" />
-        <div className="flex w-full flex-nowrap items-center justify-between gap-10">
-          <div className="flex flex-nowrap items-center gap-8 whitespace-nowrap flex-shrink-0">
+        <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <TokenCluster label="Collateral" token={{ name: 'SUI', color: '#6cd1ff' }} />
             <TokenCluster label="Receipt Token" token={{ name: 'NDLP', color: '#f59f0b' }} />
             <TokenCluster label="Incentive Token" token={{ name: 'XP Shares', color: '#faab3d' }} />
           </div>
-          <div className="ml-auto flex flex-shrink-0 flex-col gap-1 text-base text-gray-100">
-            <div className="flex items-baseline gap-2 text-gray-300">
+          <div className="flex w-full flex-col gap-1 text-base text-gray-100 lg:w-auto">
+            <div className="flex items-baseline gap-2 text-gray-300 lg:justify-end">
               <span className="text-white font-semibold">2%</span>
               <span className="text-gray-400">Management Fee</span>
             </div>
-            <div className="flex items-baseline gap-2 text-gray-300">
+            <div className="flex items-baseline gap-2 text-gray-300 lg:justify-end">
               <span className="text-white font-semibold">14.2%</span>
               <span className="text-gray-400">Performance Fee</span>
             </div>
@@ -881,21 +881,21 @@ function RiskSection() {
             <AllocationChart />
           </div>
           <div className="rounded-xl border border-border bg-surface overflow-hidden">
-            <div className="grid grid-cols-[2fr,1fr,1fr] text-xs uppercase tracking-wide text-muted px-4 py-3 border-b border-border">
-              <span>Date</span>
-              <span>Amount</span>
-              <span>Transaction</span>
-            </div>
-            <div className="divide-y divide-border">
-              {allocationHistory.map((row) => (
-                <div
-                  key={row.date + row.tx}
-                  className="grid grid-cols-[2fr,1fr,1fr] items-center px-4 py-3 text-sm text-gray-100"
-                >
-                  <span>{row.date}</span>
-                  <div className="flex items-center gap-2">
-                    <TokenIcon label="$" />
-                    <span>{row.amount}</span>
+          <div className="hidden grid-cols-[2fr,1fr,1fr] border-b border-border px-4 py-3 text-xs uppercase tracking-wide text-muted md:grid">
+            <span>Date</span>
+            <span>Amount</span>
+            <span>Transaction</span>
+          </div>
+          <div className="divide-y divide-border">
+            {allocationHistory.map((row) => (
+              <div
+                key={row.date + row.tx}
+                className="grid grid-cols-1 items-start gap-3 px-4 py-3 text-sm text-gray-100 md:grid-cols-[2fr,1fr,1fr]"
+              >
+                <span>{row.date}</span>
+                <div className="flex items-center gap-2">
+                  <TokenIcon label="$" />
+                  <span>{row.amount}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-primary">{row.tx}</span>
@@ -923,7 +923,7 @@ function DistributionSection() {
           </div>
         </div>
         <div className="rounded-2xl border border-border bg-panelMuted overflow-hidden">
-          <div className="grid grid-cols-[4fr,4fr,3fr] text-xs uppercase tracking-wide text-muted px-4 py-3 border-b border-border">
+          <div className="hidden grid-cols-[4fr,4fr,3fr] border-b border-border px-4 py-3 text-xs uppercase tracking-wide text-muted sm:grid">
             <span>User</span>
             <span>Deposit</span>
             <span>% of Deposit</span>
@@ -932,14 +932,14 @@ function DistributionSection() {
             {distributionRows.map((row) => (
               <div
                 key={row.user}
-                className="grid grid-cols-[4fr,4fr,3fr] items-center px-4 py-4 text-sm text-gray-100"
+                className="grid grid-cols-1 items-start gap-3 px-4 py-4 text-sm text-gray-100 sm:grid-cols-[4fr,4fr,3fr] sm:items-center"
               >
                 <div className="flex items-center gap-2">
                   <TokenIcon label={row.user.charAt(2)} />
                   <span>{row.user}</span>
                   <ExternalIcon />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span>{row.deposit}</span>
                   <span className="rounded-full bg-panel px-2 py-1 text-xs border border-border">
                     {row.value}
