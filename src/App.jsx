@@ -1360,85 +1360,164 @@ function PositionsSection() {
 
   return (
     <section className="mt-6 space-y-4">
-      <div
-        className="shadow-panel"
+      <AllTimePnLCard />
+      <LpBreakdownCard donutStyle={donutStyle} />
+      <CashflowCard />
+    </section>
+  )
+}
+
+function AllTimePnLCard() {
+  return (
+    <div
+      className="shadow-panel"
+      style={{
+        display: 'flex',
+        padding: '20px',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '16px',
+        alignSelf: 'stretch',
+        borderRadius: '16px',
+        background: '#26272f',
+        border: '1px solid #1f2128',
+      }}
+    >
+      <p className="text-[20px] font-semibold text-white">All Time P&amp;L Breakdown</p>
+      <div className="w-full h-px bg-[#32343e]" />
+      <div className="flex flex-col gap-3 text-[15px]">
+        <PnLRow label="Compounded Rewards" value="+$248" color="#29d78c" />
+        <PnLRow label="Impermanent Loss" value="-$173" color="#d2d6de" />
+        <PnLRow label="Net P&L" value="+$248" color="#29d78c" bold />
+      </div>
+    </div>
+  )
+}
+
+function PnLRow({ label, value, color, bold }) {
+  return (
+    <div className="flex items-center justify-between gap-2">
+      <span className="text-[#c4c8d2]">{label}</span>
+      <span
+        className="text-right"
         style={{
-          display: 'flex',
-          maxWidth: '720px',
-          padding: '17px',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '16px',
-          alignSelf: 'stretch',
-          borderRadius: '16px',
-          background: '#292A2F',
+          color,
+          fontWeight: bold ? 700 : 600,
         }}
       >
-        <div className="border-b border-border px-5 py-4 w-full">
-          <p className="text-lg font-semibold text-white">All Time P&amp;L Breakdown</p>
-        </div>
-        <div className="px-5 py-4 space-y-2 text-sm text-gray-100">
-          <BreakdownRow label="Compounded Rewards" value="+$248" positive />
-          <BreakdownRow label="Impermanent Loss" value="-$173" />
-          <div className="pt-2 border-t border-border/80">
-            <BreakdownRow label="Net P&L" value="+$248" positive bold />
-          </div>
-        </div>
+        {value}
+      </span>
+    </div>
+  )
+}
+
+function LpBreakdownCard({ donutStyle }) {
+  const pillStyle = {
+    padding: '6px 12px',
+    borderRadius: '14px',
+    background: '#0e1420',
+    border: '1px solid #101722',
+    color: '#e8ebf2',
+    fontWeight: 700,
+    fontSize: '13px',
+    lineHeight: '18px',
+    boxShadow: '0 6px 14px rgba(0,0,0,0.25)',
+  }
+
+  return (
+    <div
+      className="shadow-panel"
+      style={{
+        display: 'flex',
+        padding: '17px',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '18px',
+        alignSelf: 'stretch',
+        borderRadius: '16px',
+        background: '#292A2F',
+        border: '1px solid #1f2128',
+      }}
+    >
+      <div className="flex flex-wrap items-center gap-2 text-sm text-[#8f95a6] w-full">
+        <p className="text-[18px] font-semibold text-white">Estimated LP Breakdown</p>
+        <span className="text-[13px] text-[#8f95a6]">Secure updates ~1h • Updated 09:23:08</span>
       </div>
 
-      <div
-        className="shadow-panel"
-        style={{
-          display: 'flex',
-          padding: '17px',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '24px',
-          alignSelf: 'stretch',
-          borderRadius: '16px',
-          background: '#292A2F',
-        }}
-      >
-        <div className="flex items-center justify-between">
-          <p className="text-lg font-semibold text-white">Estimated LP Breakdown</p>
-          <p className="text-xs text-muted">Secure updates ~1h • Updated 09:23:08</p>
-        </div>
-        <div className="grid md:grid-cols-[1.2fr,0.8fr] gap-6">
-          <div className="space-y-3">
-            {lpBreakdown.map((item) => (
-              <div key={item.label} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <TokenIcon label={item.label === 'USDC' ? 'U' : 'S'} />
-                  <div>
-                    <p className="font-semibold text-white">{item.label}</p>
-                    <p className="text-sm text-muted">{item.amount}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="rounded-full bg-panel px-3 py-1 text-sm font-semibold border border-border">
-                    {item.value ?? item.amount}
-                  </span>
-                  <span className="text-sm text-white">{item.percent}%</span>
+      <div className="grid md:grid-cols-[1.1fr,0.9fr] gap-4 w-full items-center">
+        <div className="flex flex-col gap-4">
+          {lpBreakdown.map((item) => (
+            <div key={item.label} className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <TokenIcon
+                  label={item.label === 'USDC' ? 'U' : 'S'}
+                  gradient="linear-gradient(135deg,#0e6bff 0%,#111827 100%)"
+                  size={32}
+                />
+                <div className="leading-tight">
+                  <p className="text-[15px] font-semibold text-white">{item.label}</p>
+                  <p className="text-[13px] text-[#8f95a6]">{item.amount}</p>
                 </div>
               </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-center">
-            <div className="relative h-40 w-40 rounded-full border-8 border-panel" style={donutStyle}>
-              <div className="absolute inset-4 rounded-full bg-panel"></div>
+              <div className="flex items-center gap-3">
+                <span style={pillStyle}>{item.amount}</span>
+                <span className="text-[14px] font-semibold text-white">{item.percent}%</span>
+              </div>
             </div>
+          ))}
+        </div>
+        <div className="flex items-center justify-center">
+          <div
+            className="relative"
+            style={{
+              width: '160px',
+              height: '160px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle at 50% 50%, #12141b 58%, transparent 60%)',
+              boxShadow: 'inset 0 0 0 12px #0f1118',
+            }}
+          >
+            <div
+              className="absolute inset-[12px] rounded-full"
+              style={{
+                background: `conic-gradient(#2e7bff 0% ${lpBreakdown[0].percent}%, #171820 ${lpBreakdown[0].percent}% 100%)`,
+              }}
+            />
+            <div className="absolute inset-[26px] rounded-full bg-[#0f1118]" />
           </div>
         </div>
       </div>
+    </div>
+  )
+}
 
-      <div className="rounded-2xl border border-border bg-panelMuted p-5 space-y-3">
-        <p className="text-lg font-semibold text-white">Cashflow</p>
-        <div className="grid sm:grid-cols-2 gap-4 text-sm text-gray-100">
-          <InfoRow label="Total Deposits" value="$120,684" />
-          <InfoRow label="Total Withdrawals" value="$76,927" />
+function CashflowCard() {
+  return (
+    <div
+      className="shadow-panel"
+      style={{
+        display: 'flex',
+        padding: '20px',
+        flexDirection: 'column',
+        gap: '16px',
+        alignSelf: 'stretch',
+        borderRadius: '18px',
+        background: '#0b0e1a',
+        border: '1px solid #0f111a',
+      }}
+    >
+      <p className="text-[18px] font-semibold text-white">Cashflow</p>
+      <div className="grid sm:grid-cols-2 gap-4 text-[14px]">
+        <div className="space-y-1">
+          <p className="text-[#7f8595]">Total Deposits</p>
+          <p className="text-white font-semibold">$120,684</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-[#7f8595]">Total Withdrawals</p>
+          <p className="text-white font-semibold">$76,927</p>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
 
