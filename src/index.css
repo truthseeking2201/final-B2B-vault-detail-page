@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @apply bg-surface text-gray-100 font-sans antialiased;
+}
+
+a {
+  @apply text-primary hover:text-primaryStrong transition-colors;
+}
+
+.glass-card {
+  @apply bg-panel/95 border border-border backdrop-blur rounded-2xl;
+}
+
+.input-shell {
+  @apply w-full rounded-lg border border-border bg-panelMuted text-gray-100 px-3 py-2 outline-none focus:border-primary transition-colors;
+}
+
+.pill {
+  @apply rounded-full px-3 py-1 text-sm font-semibold bg-panelMuted border border-border text-gray-100;
+}
+
+.badge-dot {
+  @apply relative pl-4 text-sm text-gray-100;
+}
+
+.badge-dot::before {
+  content: '';
+  @apply absolute left-0 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-accent;
+}
+
+.table-grid {
+  @apply grid grid-cols-12 items-center text-sm text-gray-100;
+}
+
+.table-row {
+  @apply rounded-xl border border-border bg-panel/90 px-4 py-4 hover:border-primary/40 transition-colors;
+}
+
+.card-title {
+  color: #fff;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 150% */
+}
+
+.muted {
+  @apply text-muted;
+}
+
+.text-muted {
+  color: #9ca3af;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 133.333% */
+}
+
+.info-value-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.audit-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.audit-logo img {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+.modal-subtitle {
+  color: #fff;
+  text-align: center;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+.modal-title {
+  color: #edeef0;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+  text-transform: none;
+}
+
+.token-row-label {
+  color: rgba(148, 150, 156, 0.64);
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 14.2px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.explorer-button {
+  display: flex;
+  height: 51px;
+  padding: 12px 0;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 12px;
+  background: #292a2f;
+  color: #fff;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: normal;
+  border: none;
+  text-transform: none;
+}
+
+.explorer-button.inactive {
+  border: none;
+  background: #292a2f;
+  color: #fff;
+}
+
+.explorer-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.shadow-panel {
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+}
+
+.custom-modal-style {
+  display: flex;
+  min-width: 420px;
+  max-width: 600px;
+  padding: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 12px;
+  background: #262626;
+}
