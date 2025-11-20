@@ -654,7 +654,7 @@ function FieldBlock({ label, subLabel, badge, border, balance, showActions }) {
           </div>
         </div>
         {balance && (
-          <div className="flex w-full flex-col items-end gap-2">
+          <div className="flex w-full flex-col items-end gap-3">
             <p className="balance-text">{balance}</p>
             {showActions && (
               <div className="flex items-center gap-2">
