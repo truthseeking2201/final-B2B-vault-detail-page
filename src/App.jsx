@@ -196,7 +196,7 @@ function App() {
       <main className="w-full max-w-[1200px] mx-auto px-4 lg:px-6 pb-16">
         <div className="mt-6 flex w-full max-w-[1200px] flex-col items-start self-stretch rounded-[24px] border border-[#1F2937] bg-[#202126] p-6 lg:p-7">
           <div className="grid lg:grid-cols-[1.6fr,1fr] gap-6 items-start w-full">
-            <div className="space-y-6">
+            <div className="space-y-6 order-2 lg:order-1">
               <VaultHeader currency={currency} setCurrency={setCurrency} />
               <VaultTabs
                 mode={mode}
@@ -214,13 +214,10 @@ function App() {
                   {section === 'activities' && <ActivitiesSection />}
                 </>
               ) : (
-                <>
-                  <PositionsHero />
-                  <PositionsSection />
-                </>
+                <PositionsSection />
               )}
             </div>
-            <div className="lg:sticky lg:top-6 self-start">
+            <div className="order-1 lg:order-2 lg:sticky lg:top-6 self-start w-full">
               <DepositCard
                 tab={depositTab}
                 onTabChange={setDepositTab}
