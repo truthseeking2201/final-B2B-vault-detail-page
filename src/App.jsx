@@ -1366,7 +1366,19 @@ function PositionsSection() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-border bg-panelMuted p-5 space-y-4">
+      <div
+        className="shadow-panel"
+        style={{
+          display: 'flex',
+          padding: '17px',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '24px',
+          alignSelf: 'stretch',
+          borderRadius: '16px',
+          background: '#292A2F',
+        }}
+      >
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold text-white">Estimated LP Breakdown</p>
           <p className="text-xs text-muted">Secure updates ~1h • Updated 09:23:08</p>
