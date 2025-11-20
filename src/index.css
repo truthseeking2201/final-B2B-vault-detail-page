@@ -368,6 +368,7 @@ a {
   gap: 2px;
   text-align: right;
   min-width: 120px;
+  align-items: flex-end;
 }
 
 .token-modal__amount {
