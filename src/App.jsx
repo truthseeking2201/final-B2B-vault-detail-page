@@ -102,6 +102,13 @@ const lpBreakdown = [
   { label: 'SUI', percent: 38, amount: '$400,000,248', color: '#6e7cff' },
 ]
 
+const selectableTokens = [
+  { symbol: 'USDC', name: 'USD Coin', chain: 'SUI', balance: '0.108256258' },
+  { symbol: 'SUI', name: 'Sui', chain: 'SUI', balance: '125.00' },
+  { symbol: 'NDLP', name: 'NDLP', chain: 'SUI', balance: '0.00' },
+  { symbol: 'XP', name: 'XP Shares', chain: 'SUI', balance: '0.00' },
+]
+
 function App() {
   const [mode, setMode] = useState('vault')
   const [section, setSection] = useState('overview')
@@ -109,6 +116,8 @@ function App() {
   const [zap, setZap] = useState(true)
   const [currency, setCurrency] = useState('USD')
   const [showSuccess, setShowSuccess] = useState(false)
+  const [selectedAsset, setSelectedAsset] = useState('USDC')
+  const [showTokenModal, setShowTokenModal] = useState(false)
 
   const depositHandler = () => {
     setShowSuccess(true)
@@ -152,6 +161,8 @@ function App() {
                 zap={zap}
                 onZapChange={setZap}
                 onDeposit={depositHandler}
+                selectedAsset={selectedAsset}
+                onSelectAsset={() => setShowTokenModal(true)}
               />
             </div>
           </div>
@@ -159,6 +170,17 @@ function App() {
       </main>
 
       {showSuccess && <SuccessModal onClose={() => setShowSuccess(false)} />}
+      {showTokenModal && (
+        <TokenSelectModal
+          tokens={selectableTokens}
+          selected={selectedAsset}
+          onSelect={(sym) => {
+            setSelectedAsset(sym)
+            setShowTokenModal(false)
+          }}
+          onClose={() => setShowTokenModal(false)}
+        />
+      )}
     </div>
   )
 }
@@ -517,7 +539,15 @@ function TokenCluster({ label, token }) {
   )
 }
 
-function DepositCard({ tab, onTabChange, zap, onZapChange, onDeposit }) {
+function DepositCard({
+  tab,
+  onTabChange,
+  zap,
+  onZapChange,
+  onDeposit,
+  selectedAsset,
+  onSelectAsset,
+}) {
   return (
     <>
       <div className="rounded-2xl border border-primary bg-[#0f121c] shadow-panel p-5 space-y-4">
@@ -564,9 +594,10 @@ function DepositCard({ tab, onTabChange, zap, onZapChange, onDeposit }) {
       <FieldBlock
         label="0.1"
         subLabel="$0.20"
-        badge="USDC"
+        badge={selectedAsset}
         balance="Balance: 0103626528"
         showActions
+        onSelectAsset={onSelectAsset}
       />
 
       <FieldBlock label="0.1" badge="NDLP" border />
@@ -616,7 +647,7 @@ function DepositCard({ tab, onTabChange, zap, onZapChange, onDeposit }) {
   )
 }
 
-function FieldBlock({ label, subLabel, badge, border, balance, showActions }) {
+function FieldBlock({ label, subLabel, badge, border, balance, showActions, onSelectAsset }) {
   return (
     <div
       className="relative rounded-xl bg-panel"
@@ -638,8 +669,10 @@ function FieldBlock({ label, subLabel, badge, border, balance, showActions }) {
           {subLabel && <p className="text-sm text-muted">{subLabel}</p>}
         </div>
         <div className="flex flex-col items-end gap-3">
-          <div
-            className="flex items-center gap-1 rounded-[30px]"
+          <button
+            type="button"
+            onClick={onSelectAsset}
+            className="flex items-center gap-1 rounded-[30px] border border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
             style={{ height: '36px', padding: '6px 8px', background: 'rgba(255, 255, 255, 0.13)' }}
           >
             {badge === 'USDC' ? (
@@ -651,7 +684,7 @@ function FieldBlock({ label, subLabel, badge, border, balance, showActions }) {
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-full">
               <ChevronDown className="h-6 w-6 text-white" />
             </span>
-          </div>
+          </button>
           {balance && (
             <>
               <p className="balance-text">{balance}</p>
@@ -1091,6 +1124,52 @@ function ExplorerButton({ label, active }) {
         </svg>
       </span>
     </button>
+  )
+}
+
+function TokenSelectModal({ tokens, selected, onSelect, onClose }) {
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="w-[520px] max-w-[90vw] rounded-2xl bg-[#121318] border border-border shadow-panel">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+          <p className="text-lg font-semibold text-white">Select Token</p>
+          <button
+            onClick={onClose}
+            className="h-8 w-8 rounded-full bg-panel text-white grid place-items-center"
+          >
+            ×
+          </button>
+        </div>
+        <div className="px-5 py-4 space-y-4">
+          <div className="rounded-lg border border-border bg-panel px-3 py-2 text-sm text-gray-300">
+            Search name or paste address
+          </div>
+          <div className="rounded-xl border border-border bg-panel overflow-hidden">
+            {tokens.map((token) => (
+              <button
+                key={token.symbol}
+                onClick={() => onSelect(token.symbol)}
+                className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-white/5 ${
+                  selected === token.symbol ? 'bg-white/10' : ''
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <TokenIcon label={token.symbol.charAt(0)} />
+                  <div className="flex flex-col">
+                    <span className="text-white text-base font-semibold">{token.symbol}</span>
+                    <span className="text-xs text-gray-400">{token.name}</span>
+                  </div>
+                </div>
+                <div className="text-right text-sm text-gray-400">
+                  <p className="text-white font-semibold">{token.balance}</p>
+                  <p className="text-xs text-gray-500">{token.chain}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
