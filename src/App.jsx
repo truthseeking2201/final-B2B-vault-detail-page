@@ -632,12 +632,12 @@ function FieldBlock({ label, subLabel, badge, border, balance, showActions }) {
         border: border ? '1px solid #1d2534' : 'none',
       }}
     >
-      <div className="flex w-full flex-col justify-between gap-3">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <p className="stat-highlight">{label}</p>
-            {subLabel && <p className="text-sm text-muted">{subLabel}</p>}
-          </div>
+      <div className="flex w-full items-center justify-between gap-6">
+        <div className="flex flex-col gap-1">
+          <p className="stat-highlight">{label}</p>
+          {subLabel && <p className="text-sm text-muted">{subLabel}</p>}
+        </div>
+        <div className="flex flex-col items-end gap-3">
           <div
             className="flex items-center gap-1 rounded-[30px]"
             style={{ height: '36px', padding: '6px 8px', background: 'rgba(255, 255, 255, 0.13)' }}
@@ -652,18 +652,18 @@ function FieldBlock({ label, subLabel, badge, border, balance, showActions }) {
               <ChevronDown className="h-6 w-6 text-white" />
             </span>
           </div>
+          {balance && (
+            <>
+              <p className="balance-text">{balance}</p>
+              {showActions && (
+                <div className="flex items-center gap-2">
+                  <button className="action-pill">50%</button>
+                  <button className="action-pill">MAX</button>
+                </div>
+              )}
+            </>
+          )}
         </div>
-        {balance && (
-          <div className="flex w-full flex-col items-end gap-3">
-            <p className="balance-text">{balance}</p>
-            {showActions && (
-              <div className="flex items-center gap-2">
-                <button className="action-pill">50%</button>
-                <button className="action-pill">MAX</button>
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   )
