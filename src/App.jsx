@@ -320,6 +320,27 @@ function Logo() {
 }
 
 function VaultHeader({ currency, setCurrency }) {
+  const toggleButtons = (
+    <div className="flex items-center gap-2">
+      {['USD', 'SUI'].map((item) => (
+        <button
+          key={item}
+          onClick={() => setCurrency(item)}
+          style={{
+            padding: '7.25px 16px 7.77px 16px',
+          }}
+          className={`flex items-center rounded-[6px] border text-sm font-semibold transition-colors ${
+            currency === item
+              ? 'border-[#286fff] bg-[rgba(40,112,255,0.3)] text-white'
+              : 'border-border bg-panel text-gray-300 hover:border-primary/60'
+          }`}
+        >
+          {item}
+        </button>
+      ))}
+    </div>
+  )
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2 text-sm text-gray-300">
@@ -330,51 +351,37 @@ function VaultHeader({ currency, setCurrency }) {
           Deposit
         </span>
       </div>
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex items-center gap-2">
-          <img
-            src={mmtSuiLogo}
-            alt="MMT SUI"
-            className="h-[64px] w-[64px] flex-shrink-0 object-contain"
-          />
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <p className="text-[28px] leading-[24px] font-medium text-white">
-                Steakhouse SUI
-              </p>
-              <RoundedIcon>
-                <img src={copyIcon} alt="copy icon" className="h-[28px] w-[28px]" />
-              </RoundedIcon>
-              <RoundedIcon>
-                <ExternalIcon />
-              </RoundedIcon>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted">
-              <span className="inline-flex items-center gap-2">
-                Powered by
-                <img src={nodoLogo} alt="nodo logo" className="h-4 w-auto" />
-              </span>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-2">
+            <img
+              src={mmtSuiLogo}
+              alt="MMT SUI"
+              className="h-[64px] w-[64px] flex-shrink-0 object-contain"
+            />
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <p className="text-[28px] leading-[24px] font-medium text-white">
+                  Steakhouse SUI
+                </p>
+                <RoundedIcon>
+                  <img src={copyIcon} alt="copy icon" className="h-[28px] w-[28px]" />
+                </RoundedIcon>
+                <RoundedIcon>
+                  <ExternalIcon />
+                </RoundedIcon>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted">
+                <span className="inline-flex items-center gap-2">
+                  Powered by
+                  <img src={nodoLogo} alt="nodo logo" className="h-4 w-auto" />
+                </span>
+              </div>
             </div>
           </div>
+          <div className="hidden lg:flex">{toggleButtons}</div>
         </div>
-        <div className="flex items-center gap-2">
-          {['USD', 'SUI'].map((item) => (
-              <button
-                key={item}
-                onClick={() => setCurrency(item)}
-                style={{
-                  padding: '7.25px 16px 7.77px 16px',
-                }}
-                className={`flex items-center rounded-[6px] border text-sm font-semibold transition-colors ${
-                  currency === item
-                    ? 'border-[#286fff] bg-[rgba(40,112,255,0.3)] text-white'
-                    : 'border-border bg-panel text-gray-300 hover:border-primary/60'
-                }`}
-              >
-              {item}
-            </button>
-          ))}
-        </div>
+        <div className="flex justify-end lg:hidden w-full">{toggleButtons}</div>
       </div>
     </div>
   )
@@ -431,7 +438,7 @@ function SectionTabs({ section, onSectionChange }) {
 function VaultHero() {
   return (
     <div className="space-y-5">
-      <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:pb-0">
+      <div className="flex w-full gap-3 overflow-x-auto pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:pb-0">
         <div className="min-w-[180px] snap-start sm:min-w-0">
           <StatBlock
             label="APY"
@@ -631,7 +638,7 @@ function DepositCard({
   const payoutToken = selectedAsset || 'USDC'
 
   return (
-    <div className="rounded-[12px] border border-[#2870ff] bg-[#202126] p-[17px] shadow-panel text-white space-y-4">
+    <div className="w-full rounded-[12px] border border-[#2870ff] bg-[#202126] p-[17px] shadow-panel text-white space-y-4">
       <div className="flex items-center justify-between gap-3">
         <SegmentedTabs active={tab} onChange={onTabChange} />
         <ZapToggle label={isWithdraw ? 'Zap Out' : 'Zap in'} value={zap} onToggle={() => onZapChange(!zap)} />
