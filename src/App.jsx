@@ -431,25 +431,31 @@ function SectionTabs({ section, onSectionChange }) {
 function VaultHero() {
   return (
     <div className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-3">
-        <StatBlock
-          label="APY"
-          value="26.82%"
-          helper="+2.82% last 24h"
-          positive
-          icon={<SparkIcon />}
-        />
-        <StatBlock
-          label="Total Deposits"
-          renderContent={<TotalDepositsBlock />}
-        />
-        <StatBlock
-          label="Vault Share Price"
-          value="0.425"
-          helper="+12.82% last 24h"
-          positive
-          prefix={<PriceIcon />}
-        />
+      <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:pb-0">
+        <div className="min-w-[180px] snap-start sm:min-w-0">
+          <StatBlock
+            label="APY"
+            value="26.82%"
+            helper="+2.82% last 24h"
+            positive
+            icon={<SparkIcon />}
+          />
+        </div>
+        <div className="min-w-[180px] snap-start sm:min-w-0">
+          <StatBlock
+            label="Total Deposits"
+            renderContent={<TotalDepositsBlock />}
+          />
+        </div>
+        <div className="min-w-[180px] snap-start sm:min-w-0">
+          <StatBlock
+            label="Vault Share Price"
+            value="0.425"
+            helper="+12.82% last 24h"
+            positive
+            prefix={<PriceIcon />}
+          />
+        </div>
       </div>
 
       <div className="flex w-full flex-col items-start self-stretch gap-6 rounded-[16px] border border-border bg-[#2B2C31] px-5 py-[17px] text-sm text-gray-100">
@@ -510,20 +516,20 @@ function PositionsHero() {
 function StatBlock({ label, value, helper, positive, icon, prefix, renderContent }) {
   return (
     <div className="flex flex-col gap-1">
-      <p className="text-lg text-gray-400 font-semibold">{label}</p>
+      <p className="text-base sm:text-lg text-gray-400 font-semibold">{label}</p>
       {renderContent ? (
         renderContent
       ) : (
         <>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {prefix}
-            <span className="flex w-[100px] h-8 flex-col justify-center text-white text-[28px] font-medium leading-[140%]">
+            <span className="flex flex-col justify-center text-white text-[22px] sm:text-[28px] font-semibold leading-[130%]">
               {value}
             </span>
             {icon && <span className="text-3xl">{icon}</span>}
           </div>
           <p
-            className={`text-[14px] font-semibold ${
+            className={`text-[13px] sm:text-[14px] font-semibold ${
               positive ? 'text-green-400' : 'text-gray-400'
             }`}
           >
@@ -537,13 +543,13 @@ function StatBlock({ label, value, helper, positive, icon, prefix, renderContent
 
 function TotalDepositsBlock() {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-3 sm:gap-4">
       <RingGaugeLarge />
       <div className="flex flex-col gap-1">
-        <span className="flex w-[100px] h-8 flex-col justify-center text-white text-[28px] font-medium leading-[140%]">
+        <span className="flex flex-col justify-center text-white text-[22px] sm:text-[28px] font-semibold leading-[130%]">
           $13.00M
         </span>
-        <span className="text-[14px] font-semibold text-gray-400">
+        <span className="text-[13px] sm:text-[14px] font-semibold text-gray-400">
           Out of <span className="text-white">$61.09M</span>
         </span>
       </div>
