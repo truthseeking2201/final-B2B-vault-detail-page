@@ -3,6 +3,11 @@ import momentumLogo from './assets/logo-momentum.png'
 import mmtSuiLogo from './assets/mmt-sui.svg'
 import maxDrawdownIcon from './assets/icon-MaxDrawdown.svg'
 import quillauditsLogo from './assets/quillaudits-logo.png'
+import copyIcon from './assets/copy.svg'
+import suiSmall from './assets/sui-small.svg'
+import nodoLogo from './assets/NODO Logo.svg'
+import hashlock from './assets/hashlock.png'
+import hypernative from './assets/hypernative.png'
 
 const navLinks = [
   'Trade',
@@ -230,41 +235,46 @@ function VaultHeader({ currency, setCurrency }) {
         </span>
       </div>
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex items-start gap-2">
+        <div className="flex items-center gap-2">
           <img
             src={mmtSuiLogo}
             alt="MMT SUI"
-            className="h-[50px] w-[50px] flex-shrink-0 object-contain"
+            className="h-[64px] w-[64px] flex-shrink-0 object-contain"
           />
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               <p className="text-[28px] leading-[24px] font-medium text-white">
                 Steakhouse SUI
               </p>
-              <RoundedIcon>ℹ️</RoundedIcon>
+              <RoundedIcon>
+                <img src={copyIcon} alt="copy icon" className="h-[28px] w-[28px]" />
+              </RoundedIcon>
               <RoundedIcon>
                 <ExternalIcon />
               </RoundedIcon>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted">
-              <span className="inline-flex items-center gap-1">
-                <OrangeDot />
-                Powered by <span className="text-orange-400 font-semibold">nodo</span>
+              <span className="inline-flex items-center gap-2">
+                Powered by
+                <img src={nodoLogo} alt="nodo logo" className="h-4 w-auto" />
               </span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {['USD', 'SUI'].map((item) => (
-            <button
-              key={item}
-              onClick={() => setCurrency(item)}
-              className={`h-9 px-4 rounded-lg border text-sm font-semibold transition-colors ${
-                currency === item
-                  ? 'border-primary bg-primary/10 text-white'
-                  : 'border-border bg-panel text-gray-300 hover:border-primary/60'
-              }`}
-            >
+              <button
+                key={item}
+                onClick={() => setCurrency(item)}
+                style={{
+                  padding: '7.25px 16px 7.77px 16px',
+                }}
+                className={`flex items-center rounded-[6px] border text-sm font-semibold transition-colors ${
+                  currency === item
+                    ? 'border-[#286fff] bg-[rgba(40,112,255,0.3)] text-white'
+                    : 'border-border bg-panel text-gray-300 hover:border-primary/60'
+                }`}
+              >
               {item}
             </button>
           ))}
@@ -381,18 +391,18 @@ function PositionsHero() {
       <div className="grid sm:grid-cols-2 gap-6">
         <div className="rounded-2xl border border-border bg-panelMuted px-4 py-3">
           <p className="text-sm text-muted">Total Liquidity</p>
-          <div className="flex items-center gap-3 mt-2">
-            <RingGauge />
-            <div>
-              <p className="text-2xl font-semibold text-white">4,926.00</p>
-              <p className="text-sm text-muted">≈ $5,216.00</p>
+            <div className="flex items-center gap-3 mt-2">
+              <RingGauge />
+              <div>
+                <p className="stat-highlight">4,926.00</p>
+                <p className="text-sm text-muted">≈ $5,216.00</p>
+              </div>
             </div>
           </div>
-        </div>
         <div className="rounded-2xl border border-border bg-panelMuted px-4 py-3">
           <p className="text-sm text-muted">Break-even</p>
           <div className="flex items-center gap-3 mt-2">
-            <p className="text-2xl font-semibold text-white">$1.00</p>
+            <p className="stat-highlight">$1.00</p>
             <p className="text-sm text-muted">Current Vault Shares price: $1.12</p>
           </div>
         </div>
@@ -447,7 +457,7 @@ function TotalDepositsBlock() {
     <div className="flex items-center gap-4">
       <RingGaugeLarge />
       <div className="flex flex-col gap-1">
-        <span className="flex w-[112px] h-8 flex-col justify-center text-[28px] font-medium leading-[140%] text-[#FAFBFC]">
+        <span className="flex w-[100px] h-8 flex-col justify-center text-white text-[28px] font-medium leading-[140%]">
           $13.00M
         </span>
         <span className="text-[14px] font-semibold text-gray-400">
@@ -460,9 +470,9 @@ function TotalDepositsBlock() {
 
 function RingGaugeLarge() {
   return (
-    <div className="relative h-16 w-16">
+    <div className="relative h-10 w-10">
       <div className="absolute inset-0 rounded-full bg-[conic-gradient(#2e7bff_0deg_250deg,#2b2c31_250deg_360deg)]" />
-      <div className="absolute inset-2 rounded-full bg-panel" />
+      <div className="absolute inset-[3px] rounded-full bg-panel" />
     </div>
   )
 }
@@ -492,7 +502,7 @@ function TokenRow({ label, tokens }) {
 function TokenCluster({ label, token }) {
   return (
     <div className="flex flex-col gap-2 flex-shrink-0">
-          <span className="token-row-label">{label}</span>
+      <span className="text-base font-semibold text-gray-400 leading-none">{label}</span>
       <div className="flex items-center gap-2 text-lg font-semibold text-white">
         <TokenIcon
           label={token.name.charAt(0)}
@@ -509,7 +519,8 @@ function TokenCluster({ label, token }) {
 
 function DepositCard({ tab, onTabChange, zap, onZapChange, onDeposit }) {
   return (
-    <div className="rounded-2xl border border-primary bg-[#0f121c] shadow-panel p-5 space-y-4">
+    <>
+      <div className="rounded-2xl border border-primary bg-[#0f121c] shadow-panel p-5 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 text-sm font-semibold text-gray-200">
           {['deposit', 'withdraw'].map((item) => (
@@ -550,18 +561,13 @@ function DepositCard({ tab, onTabChange, zap, onZapChange, onDeposit }) {
         <span className="text-white font-semibold">1,260.05%</span>
       </div>
 
-      <FieldBlock label="0.1" subLabel="$0.20" badge="USDC" />
-      <div className="flex items-center justify-end gap-2 text-xs text-gray-300">
-        <button className="rounded-md border border-border px-2 py-1 hover:border-primary/60">
-          50%
-        </button>
-        <button className="rounded-md border border-border px-2 py-1 hover:border-primary/60">
-          MAX
-        </button>
-      </div>
-      <div className="flex items-center justify-between text-sm text-muted">
-        <span>Balance: 0103626528</span>
-      </div>
+      <FieldBlock
+        label="0.1"
+        subLabel="$0.20"
+        badge="USDC"
+        balance="Balance: 0103626528"
+        showActions
+      />
 
       <FieldBlock label="0.1" badge="NDLP" border />
 
@@ -571,42 +577,93 @@ function DepositCard({ tab, onTabChange, zap, onZapChange, onDeposit }) {
       >
         {tab === 'deposit' ? 'Deposit' : 'Withdraw'}
       </button>
-
-        <div className="flex flex-wrap items-center justify-center gap-4 text-[11px] text-muted pt-2 border-t border-border">
-          <span className="uppercase tracking-wide text-green-500 font-semibold">
-            Security. Audited by
-          </span>
-        <span className="audit-logo" aria-label="QuillAudits">
-          <img src={quillauditsLogo} alt="QuillAudits logo" className="h-5 w-auto" />
-        </span>
-        <span>hashlock</span>
-        <span>HYBRIDANTIVE</span>
-      </div>
     </div>
+      <div className="mt-4 flex flex-col items-center gap-4 border-t border-border pt-4">
+        <div className="flex items-center gap-2 text-[12px] font-semibold tracking-[1.46px] text-[#0F8] uppercase">
+          <span className="audit-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path
+                d="M10 2L3 5.5V11C3 15 6 18 10 18C14 18 17 15 17 11V5.5L10 2Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M7 10.5L9 13L13 7.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+          Security. Audited by
+        </div>
+        <div className="flex items-center justify-center gap-6">
+          <span className="audit-logo" aria-label="QuillAudits">
+            <img src={quillauditsLogo} alt="QuillAudits logo" className="h-5 w-auto" />
+          </span>
+          <span className="partner-logo">
+            <img src={hashlock} alt="hashlock" className="h-5 w-auto" />
+          </span>
+          <span className="partner-logo partner-logo--hypernative">
+            <img src={hypernative} alt="HYBRIDANTIVE" className="h-6 w-auto" />
+          </span>
+        </div>
+      </div>
+    </>
   )
 }
 
-function FieldBlock({ label, subLabel, badge, border }) {
+function FieldBlock({ label, subLabel, badge, border, balance, showActions }) {
   return (
     <div
-      className={`relative rounded-xl ${
-        border ? 'border border-border bg-panelMuted' : 'bg-panel'
-      } px-4 py-3`}
+      className="relative rounded-xl bg-panel"
+      style={{
+        display: 'flex',
+        minHeight: '136.08px',
+        padding: '12px',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        alignSelf: 'stretch',
+        borderRadius: '12px',
+        background: 'rgba(255, 255, 255, 0.04)',
+        border: border ? '1px solid #1d2534' : 'none',
+      }}
     >
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-2xl font-semibold text-white">{label}</p>
-          {subLabel && <p className="text-sm text-muted">{subLabel}</p>}
-        </div>
-        <div className="flex items-center gap-2">
-          <TokenIcon label={badge.charAt(0)} />
-          <div className="rounded-md border border-border bg-panelMuted px-3 py-2 text-sm font-semibold text-white">
-            {badge}
+      <div className="flex w-full flex-col justify-between gap-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col gap-1">
+            <p className="stat-highlight">{label}</p>
+            {subLabel && <p className="text-sm text-muted">{subLabel}</p>}
           </div>
-          <RoundedIcon>
-            <ChevronDown />
-          </RoundedIcon>
+          <div
+            className="flex items-center gap-1 rounded-[30px]"
+            style={{ height: '36px', padding: '6px 8px', background: 'rgba(255, 255, 255, 0.13)' }}
+          >
+            {badge === 'USDC' ? (
+              <USDCIcon />
+            ) : (
+              <TokenIcon label={badge.charAt(0)} />
+            )}
+            <span className="token-pill-label">{badge}</span>
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full">
+              <ChevronDown className="h-6 w-6 text-white" />
+            </span>
+          </div>
         </div>
+        {balance && (
+          <div className="flex w-full flex-col items-end gap-2">
+            <p className="balance-text">{balance}</p>
+            {showActions && (
+              <div className="flex items-center gap-2">
+                <button className="action-pill">50%</button>
+                <button className="action-pill">MAX</button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -1046,7 +1103,7 @@ function QuickStat({ title, value, helper, ringColor }) {
       />
       <div>
         <p className="text-sm text-muted">{title}</p>
-        <p className="text-2xl font-semibold text-white">{value}</p>
+        <p className="stat-highlight">{value}</p>
         <p className="text-sm text-muted">{helper}</p>
       </div>
     </div>
@@ -1074,7 +1131,15 @@ function InfoBlock({ label, value, cta }) {
       <p className="text-sm text-muted">{label}</p>
       <div className="info-value-row">
         {value}
-        {cta && <RoundedIcon>{cta === 'Copy' ? '⧉' : '↗'}</RoundedIcon>}
+        {cta && (
+          <RoundedIcon>
+            {cta === 'Copy' ? (
+              <img src={copyIcon} alt="Copy" className="h-5 w-5" />
+            ) : (
+              '↗'
+            )}
+          </RoundedIcon>
+        )}
       </div>
     </div>
   )
@@ -1122,9 +1187,32 @@ function TokenIcon({ label, gradient }) {
   )
 }
 
+function USDCIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      className="h-8 w-8"
+    >
+      <circle cx="32" cy="32" r="32" fill="#2e7bff" />
+      <path
+        d="M32 18c-7.732 0-14 6.268-14 14s6.268 14 14 14 14-6.268 14-14-6.268-14-14-14Zm0 24c-5.523 0-10-4.477-10-10s4.477-10 10-10 10 4.477 10 10-4.477 10-10 10Z"
+        fill="#fff"
+      />
+      <path
+        d="M30 37.5v-3.2c-1.8-.4-3-1.6-3-3.5 0-2.6 2.1-3.6 5-4.1v-2.1c0-.4.3-.7.7-.7h0.6c.4 0 .7.3.7.7v2c1.5.1 2.9.5 4 1.1.2.1.4.4.4.6v1c0 .5-.5.9-1 .6-.9-.5-2-.8-3.4-1v3.6c2.5.6 4.2 1.6 4.2 3.8 0 2.6-2.1 3.7-4.9 4.1v2.1c0 .4-.3.7-.7.7h-.6c-.4 0-.7-.3-.7-.7v-2c-1.6-.1-3.1-.5-4.5-1.2-.2-.1-.4-.3-.4-.6v-1c0-.5.5-.9 1-.6 1 .5 2.3.9 3.8 1v-3.5c-2.6-.6-4.2-1.7-4.2-3.8 0-2.3 1.9-3.6 4.2-4Z"
+        fill="#fff"
+      />
+    </svg>
+  )
+}
+
 function RoundedIcon({ children }) {
   return (
-    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border bg-panel text-sm text-gray-200">
+    <span
+      className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-sm text-gray-200"
+      style={{ background: 'rgba(255, 255, 255, 0.10)' }}
+    >
       {children}
     </span>
   )
@@ -1146,11 +1234,27 @@ function ArrowLeft() {
 
 function ExternalIcon() {
   return (
-    <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 text-muted">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-4 w-4 text-muted"
+    >
       <path
-        d="M11 4h5v5m0-5-6 6m-1 1H4v6h6v-5"
+        d="M4.66602 4.66602H11.3327V11.3327"
         stroke="currentColor"
-        strokeWidth="1.4"
+        strokeOpacity="0.64"
+        strokeWidth="1.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4.66602 11.3327L11.3327 4.66602"
+        stroke="currentColor"
+        strokeOpacity="0.64"
+        strokeWidth="1.33333"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -1160,9 +1264,7 @@ function ExternalIcon() {
 
 function PriceIcon() {
   return (
-    <div className="h-[20px] w-[20px] rounded-full bg-[#0f6cff] text-white grid place-items-center text-sm font-semibold">
-      1
-    </div>
+    <img src={suiSmall} alt="SUI" className="h-[20px] w-[20px]" />
   )
 }
 
@@ -1174,9 +1276,9 @@ function RingIcon() {
   return <div className="h-[20px] w-[20px] rounded-full border-[6px] border-primary" />
 }
 
-function ChevronDown() {
+function ChevronDown({ className }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-gray-200">
+    <svg viewBox="0 0 24 24" fill="none" className={className ?? 'h-4 w-4 text-gray-200'}>
       <path
         d="M6 9l6 6 6-6"
         stroke="currentColor"
@@ -1186,10 +1288,6 @@ function ChevronDown() {
       />
     </svg>
   )
-}
-
-function OrangeDot() {
-  return <span className="inline-block h-2.5 w-2.5 rounded-full bg-orange-400" />
 }
 
 function VaultShareChart() {
@@ -1378,7 +1476,11 @@ function PerformanceChart() {
 
   return (
     <div className="relative">
-      <div className="absolute left-4 top-4 z-10 w-[220px] rounded-xl border border-border bg-panel p-3 text-xs text-gray-200 shadow-lg transition-colors">
+      <div
+        className={`absolute left-4 top-4 z-10 w-[220px] rounded-xl border border-border bg-panel p-3 text-xs text-gray-200 shadow-lg transition-all duration-200 ${
+          hoveredIndex !== null ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+        }`}
+      >
         <p className="text-muted">{activeItem.date}</p>
         <div className="mt-2 flex items-center justify-between">
           <span>APY</span>
