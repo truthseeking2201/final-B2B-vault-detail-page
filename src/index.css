@@ -249,3 +249,149 @@ a {
   border-radius: 12px;
   background: #262626;
 }
+
+.token-modal {
+  width: 498px;
+  max-width: calc(100vw - 48px);
+  border-radius: 16px;
+  background: #121318;
+  border: 1px solid #1f2028;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  padding: 24px;
+}
+
+.token-modal__title {
+  margin: 0 0 16px 0;
+  color: #edeef0;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.token-modal__search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #1f2028;
+  background: #1a1b21;
+  color: #8a8f9d;
+}
+
+.token-modal__search input {
+  background: transparent;
+  border: none;
+  color: #edeef0;
+  font-size: 15px;
+  line-height: 19px;
+  outline: none;
+  height: 100%;
+}
+
+.token-modal__search input::placeholder {
+  color: #8a8f9d;
+}
+
+.token-modal__reset {
+  display: grid;
+  place-items: center;
+  height: 24px;
+  width: 24px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.token-modal__list {
+  margin-top: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.token-modal__row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  padding: 0 6px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  text-align: left;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.token-modal__row:hover {
+  background: #171820;
+}
+
+.token-modal__row + .token-modal__row {
+  margin-top: 12px;
+}
+
+.token-modal__row--selected {
+  background: #171820;
+  border-color: rgba(46, 123, 255, 0.35);
+}
+
+.token-modal__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.token-modal__symbol {
+  color: #f1f3f5;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.token-modal__subtitle {
+  color: #8a8f9d;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.token-modal__right {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+  min-width: 120px;
+}
+
+.token-modal__amount {
+  color: #f1f3f5;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.token-modal__address {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #8a8f9d;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.token-verified {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  width: 16px;
+}

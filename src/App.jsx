@@ -2,12 +2,12 @@ import { useMemo, useState } from 'react'
 import momentumLogo from './assets/logo-momentum.png'
 import mmtSuiLogo from './assets/mmt-sui.svg'
 import maxDrawdownIcon from './assets/icon-MaxDrawdown.svg'
-import quillauditsLogo from './assets/quillaudits-logo.png'
 import copyIcon from './assets/copy.svg'
 import suiSmall from './assets/sui-small.svg'
 import nodoLogo from './assets/NODO Logo.svg'
-import hashlock from './assets/hashlock.png'
-import hypernative from './assets/hypernative.png'
+import usdcLogo from './assets/usdc.svg'
+import usdtLogo from './assets/usdt.svg'
+import wbtcLogo from './assets/wbtc.svg'
 
 const navLinks = [
   'Trade',
@@ -103,10 +103,76 @@ const lpBreakdown = [
 ]
 
 const selectableTokens = [
-  { symbol: 'USDC', name: 'USD Coin', chain: 'SUI', balance: '0.108256258' },
-  { symbol: 'SUI', name: 'Sui', chain: 'SUI', balance: '125.00' },
-  { symbol: 'NDLP', name: 'NDLP', chain: 'SUI', balance: '0.00' },
-  { symbol: 'XP', name: 'XP Shares', chain: 'SUI', balance: '0.00' },
+  {
+    symbol: 'xSUI',
+    name: 'xSUI',
+    subtitle: 'xSUI',
+    balance: '0',
+    address: '0x2b6..._SUI',
+    verified: true,
+    gradient: 'linear-gradient(135deg, #1a6aff 0%, #53d1ff 100%)',
+    logo: null,
+  },
+  {
+    symbol: 'DEEP',
+    name: 'DeepBook Token',
+    subtitle: 'DEEP',
+    balance: '13.586',
+    address: '0xdee...DEEP',
+    verified: true,
+    gradient: 'linear-gradient(135deg, #0c78ff 0%, #19c7ff 100%)',
+    logo: null,
+  },
+  {
+    symbol: 'SUI',
+    name: 'Sui',
+    subtitle: 'SUI',
+    balance: '0.108',
+    address: '0x2::...:SUI',
+    verified: true,
+    gradient: 'linear-gradient(135deg, #1f6bff 0%, #60b9ff 100%)',
+    logo: null,
+  },
+  {
+    symbol: 'wUSDT',
+    name: 'Tether USD (Wormhole)',
+    subtitle: 'wUSDT',
+    balance: '0',
+    address: '0xc06...COIN',
+    verified: true,
+    gradient: 'linear-gradient(135deg, #0f9a63 0%, #00c48c 100%)',
+    logo: usdtLogo,
+  },
+  {
+    symbol: 'SATYBTC.B',
+    name: 'SATYBTC.B',
+    subtitle: 'satYBTC.B',
+    balance: '0',
+    address: '0x9e9...YBTC',
+    verified: true,
+    gradient: 'linear-gradient(135deg, #ff9d4d 0%, #ef7d1a 100%)',
+    logo: wbtcLogo,
+  },
+  {
+    symbol: 'USDY',
+    name: 'Ondo US Dollar Yield',
+    subtitle: 'USDY',
+    balance: '0',
+    address: '0x960...USDY',
+    verified: true,
+    gradient: 'linear-gradient(135deg, #4c70ff 0%, #6e90ff 100%)',
+    logo: null,
+  },
+  {
+    symbol: 'wUSDC',
+    name: 'USD Coin (Wormhole)',
+    subtitle: 'wUSDC',
+    balance: '0',
+    address: '0x5d4...COIN',
+    verified: true,
+    gradient: 'linear-gradient(135deg, #2e7bff 0%, #53c6ff 100%)',
+    logo: usdcLogo,
+  },
 ]
 
 function App() {
@@ -116,7 +182,7 @@ function App() {
   const [zap, setZap] = useState(true)
   const [currency, setCurrency] = useState('USD')
   const [showSuccess, setShowSuccess] = useState(false)
-  const [selectedAsset, setSelectedAsset] = useState('USDC')
+  const [selectedAsset, setSelectedAsset] = useState('xSUI')
   const [showTokenModal, setShowTokenModal] = useState(false)
 
   const depositHandler = () => {
@@ -548,157 +614,458 @@ function DepositCard({
   selectedAsset,
   onSelectAsset,
 }) {
+  const isWithdraw = tab === 'withdraw'
+  const payoutToken = selectedAsset || 'USDC'
+
+  return (
+    <div className="rounded-[12px] border border-[#2870ff] bg-[#202126] p-[17px] shadow-panel text-white space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <SegmentedTabs active={tab} onChange={onTabChange} />
+        <ZapToggle label={isWithdraw ? 'Zap Out' : 'Zap in'} value={zap} onToggle={() => onZapChange(!zap)} />
+      </div>
+
+      {isWithdraw ? (
+        <WithdrawBody
+          zap={zap}
+          payoutToken={payoutToken}
+          onSelectAsset={onSelectAsset}
+          onDeposit={onDeposit}
+        />
+      ) : (
+        <DepositBody
+          zap={zap}
+          payoutToken={payoutToken}
+          onSelectAsset={onSelectAsset}
+          onDeposit={onDeposit}
+        />
+      )}
+    </div>
+  )
+}
+
+function DepositBody({ zap, payoutToken, onSelectAsset, onDeposit }) {
   return (
     <>
-      <div className="rounded-2xl border border-primary bg-[#0f121c] shadow-panel p-5 space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 text-sm font-semibold text-gray-200">
-          {['deposit', 'withdraw'].map((item) => (
-            <button
-              key={item}
-              onClick={() => onTabChange(item)}
-              className={`rounded-md px-3 py-2 ${
-                tab === item ? 'bg-white text-[#0f121c]' : 'bg-panel text-gray-200'
-              }`}
-            >
-              {item === 'deposit' ? 'Deposit' : 'Withdraw'}
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center gap-2 text-sm text-gray-200">
-          <span>Zap in</span>
-          <button
-            onClick={() => onZapChange(!zap)}
-            className={`relative h-6 w-12 rounded-full border border-border transition-colors ${
-              zap ? 'bg-primary' : 'bg-panelMuted'
-            }`}
-          >
-            <span
-              className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 rounded-full bg-white transition-all ${
-                zap ? 'right-1' : 'left-1'
-              }`}
-            />
-          </button>
-        </div>
+      <div className="space-y-2">
+        <StatRow label="Slippage">
+          <div className="flex items-center gap-2 text-sm">
+            <span>0.5%</span>
+            <GearIcon />
+          </div>
+        </StatRow>
+        <StatRow label="Vault APR:">
+          <div className="flex items-center gap-1 text-sm">
+            <span>1,260.05%</span>
+            <InfoCircle />
+          </div>
+        </StatRow>
       </div>
 
-      <div className="flex items-center justify-between text-sm text-muted">
-        <span>Slippage</span>
-        <span>0.5%</span>
-      </div>
-      <div className="flex items-center justify-between text-sm text-muted">
-        <span>Vault APR:</span>
-        <span className="text-white font-semibold">1,260.05%</span>
-      </div>
+      {zap ? (
+        <SingleDepositInput
+          amount="0.1"
+          fiat="$0.20"
+          token={payoutToken}
+          balance="0.108256258"
+          onSelectToken={onSelectAsset}
+        />
+      ) : (
+        <DualDepositInput
+          topToken={{ amount: '1', fiat: '$2.054', symbol: 'SUI', balance: '0' }}
+          bottomToken={{ amount: '4.92761', fiat: '$2.292', symbol: 'MMT', balance: '0' }}
+        />
+      )}
 
-      <FieldBlock
-        label="0.1"
-        subLabel="$0.20"
-        badge={selectedAsset}
-        balance="Balance: 0103626528"
-        showActions
-        onSelectAsset={onSelectAsset}
-      />
-
-      <FieldBlock label="0.1" badge="NDLP" border />
-
-      <button
-        onClick={onDeposit}
-        className="w-full rounded-lg bg-primary py-3 text-center text-white font-semibold hover:bg-primaryStrong transition-colors"
-      >
-        {tab === 'deposit' ? 'Deposit' : 'Withdraw'}
-      </button>
-    </div>
-      <div className="mt-4 flex flex-col items-center gap-4 border-t border-border pt-4">
-        <div className="flex items-center gap-2 text-[12px] font-semibold tracking-[1.46px] text-[#0F8] uppercase">
-          <span className="audit-icon">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path
-                d="M10 2L3 5.5V11C3 15 6 18 10 18C14 18 17 15 17 11V5.5L10 2Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M7 10.5L9 13L13 7.5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
-          Security. Audited by
-        </div>
-        <div className="flex items-center justify-center gap-6">
-          <span className="audit-logo" aria-label="QuillAudits">
-            <img src={quillauditsLogo} alt="QuillAudits logo" className="h-5 w-auto" />
-          </span>
-          <span className="partner-logo">
-            <img src={hashlock} alt="hashlock" className="h-5 w-auto" />
-          </span>
-          <span className="partner-logo partner-logo--hypernative">
-            <img src={hypernative} alt="HYBRIDANTIVE" className="h-6 w-auto" />
-          </span>
-        </div>
-      </div>
+      <ReceiveSection title="Est. Receive" tokens={['NDLP']} />
+      <PrimaryActionButton label="Deposit" onClick={onDeposit} />
     </>
   )
 }
 
-function FieldBlock({ label, subLabel, badge, border, balance, showActions, onSelectAsset }) {
+function WithdrawBody({ zap, payoutToken, onSelectAsset, onDeposit }) {
+  const receiveTokens = zap ? [payoutToken] : ['USDC', 'SUI']
+
   return (
-    <div
-      className="relative rounded-xl bg-panel"
-      style={{
-        display: 'flex',
-        minHeight: '136.08px',
-        padding: '12px',
-        justifyContent: 'space-between',
-        alignItems: 'stretch',
-        alignSelf: 'stretch',
-        borderRadius: '12px',
-        background: 'rgba(255, 255, 255, 0.04)',
-        border: border ? '1px solid #1d2534' : 'none',
-      }}
-    >
-      <div className="flex w-full items-center justify-between gap-6">
-        <div className="flex flex-col gap-1">
-          <p className="stat-highlight">{label}</p>
-          {subLabel && <p className="text-sm text-muted">{subLabel}</p>}
+    <>
+      <div className="space-y-2">
+        <StatRow label="Rate">
+          <div className="flex items-center gap-2 text-sm">
+            <RateBadge />
+            <span>1 USDC = 1.05 NDLP</span>
+            <RefreshBadge />
+          </div>
+        </StatRow>
+        <StatRow label="Transaction Fee">
+          <span className="text-sm">Free</span>
+        </StatRow>
+      </div>
+
+      {zap && (
+        <SelectorRow label="Select Payout Token">
+          <TokenPill symbol={payoutToken} onClick={onSelectAsset} />
+        </SelectorRow>
+      )}
+
+      <AmountSection
+        title="Withdraw Amount"
+        value="0.1"
+        fiatHint="$0.20"
+        tokenSymbol="NDLP"
+        balance="0.108256258"
+        showActions
+      />
+
+      <ReceiveSection
+        title="Est. Max Receive"
+        tokens={receiveTokens}
+        stacked={!zap}
+      />
+
+      <PrimaryActionButton label="Withdraw" onClick={onDeposit} />
+    </>
+  )
+}
+
+function SegmentedTabs({ active, onChange }) {
+  const options = [
+    { key: 'deposit', label: 'Deposit' },
+    { key: 'withdraw', label: 'Withdraw' },
+  ]
+
+  return (
+    <div className="flex items-center gap-1 rounded-[6px] bg-white/[0.04] p-1 border border-transparent">
+      {options.map((opt) => (
+        <button
+          key={opt.key}
+          onClick={() => onChange(opt.key)}
+          className={`relative h-8 min-w-[96px] rounded-[6px] px-4 text-sm font-semibold transition-colors ${
+            active === opt.key ? 'bg-white text-[#202126]' : 'text-white/75'
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function ZapToggle({ label, value, onToggle }) {
+  return (
+    <div className="flex items-center gap-2 text-[12px] font-medium text-[#94969c]">
+      <span>{label}</span>
+      <button
+        onClick={onToggle}
+        className={`relative h-5 w-9 rounded-full transition-colors ${
+          value ? 'bg-[#174dff]' : 'bg-[#292a2f]'
+        }`}
+      >
+        <span
+          className={`absolute top-[2px] h-4 w-4 rounded-full bg-white transition-all ${
+            value ? 'left-[2px]' : 'left-[18px]'
+          }`}
+        />
+      </button>
+    </div>
+  )
+}
+
+function StatRow({ label, children }) {
+  return (
+    <div className="flex items-center justify-between text-sm text-white">
+      <span className="text-white">{label}</span>
+      <div className="flex items-center gap-2">{children}</div>
+    </div>
+  )
+}
+
+function SelectorRow({ label, children }) {
+  return (
+    <div className="flex items-center justify-between rounded-[12px] border border-[#2f323b] bg-white/[0.04] px-3 py-2 text-sm">
+      <span>{label}</span>
+      {children}
+    </div>
+  )
+}
+
+function SingleDepositInput({ amount, fiat, token, balance, onSelectToken }) {
+  return (
+    <div className="rounded-[16px] border border-[#2d3038] bg-white/[0.05] px-4 py-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="space-y-[6px]">
+          <p className="text-[36px] leading-[44px] tracking-[-0.04em] text-white">{amount}</p>
+          <p className="text-[20px] leading-[28px] text-[rgba(133,136,142,0.6)]">{fiat}</p>
         </div>
-        <div className="flex flex-col items-end gap-3">
-          <button
-            type="button"
-            onClick={onSelectAsset}
-            className="flex items-center gap-1 rounded-[30px] border border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-            style={{ height: '36px', padding: '6px 8px', background: 'rgba(255, 255, 255, 0.13)' }}
-          >
-            {badge === 'USDC' ? (
-              <USDCIcon />
-            ) : (
-              <TokenIcon label={badge.charAt(0)} />
-            )}
-            <span className="token-pill-label">{badge}</span>
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full">
-              <ChevronDown className="h-6 w-6 text-white" />
-            </span>
-          </button>
-          {balance && (
-            <>
-              <p className="balance-text">{balance}</p>
-              {showActions && (
-                <div className="flex items-center gap-2">
-                  <button className="action-pill">50%</button>
-                  <button className="action-pill">MAX</button>
-                </div>
-              )}
-            </>
-          )}
+        <div className="flex flex-col items-end gap-2">
+          <TokenPill symbol={token} onClick={onSelectToken} />
+          <p className="text-[12px] leading-[18px] text-[#61646c]">
+            Balance: <span className="text-[#94969c]">{balance}</span>
+          </p>
+          <div className="flex items-center gap-2">
+            <MiniActionButton>50%</MiniActionButton>
+            <MiniActionButton>MAX</MiniActionButton>
+          </div>
         </div>
       </div>
     </div>
+  )
+}
+
+function DualDepositInput({ topToken, bottomToken }) {
+  return (
+    <div className="rounded-[16px] border border-[#2d3038] bg-white/[0.05] overflow-hidden">
+      <DepositField {...topToken} />
+      <div className="h-px bg-[#2f323b] mx-3" />
+      <DepositField {...bottomToken} />
+    </div>
+  )
+}
+
+function DepositField({ amount, fiat, symbol, balance }) {
+  return (
+    <div className="px-4 py-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="space-y-[6px]">
+          <p className="text-[36px] leading-[44px] tracking-[-0.04em] text-white">{amount}</p>
+          <p className="text-[20px] leading-[28px] text-[rgba(133,136,142,0.6)]">{fiat}</p>
+        </div>
+        <div className="flex flex-col items-end gap-2">
+          <TokenPill symbol={symbol} showCaret={false} />
+          <p className="text-[12px] leading-[18px] text-[#61646c]">
+            Balance: <span className="text-[#94969c]">{balance}</span>
+          </p>
+          <div className="flex items-center gap-2">
+            <MiniActionButton>50%</MiniActionButton>
+            <MiniActionButton>MAX</MiniActionButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function AmountSection({ title, value, fiatHint, tokenSymbol, balance, onSelectToken, showActions }) {
+  const selectable = Boolean(onSelectToken) && tokenSymbol !== 'NDLP'
+
+  return (
+    <div className="space-y-2">
+      <p className="text-base text-white">{title}</p>
+      <div className="rounded-[12px] border border-[#2d3038] bg-white/[0.04] px-3 py-3">
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-[6px]">
+            <p className="text-[36px] leading-[44px] tracking-[-0.04em] text-white">{value}</p>
+            {fiatHint && (
+              <p className="text-[20px] leading-[28px] text-[rgba(133,136,142,0.6)]">{fiatHint}</p>
+            )}
+          </div>
+          <div className="flex flex-col items-end gap-2">
+            <button
+              type="button"
+              onClick={selectable ? onSelectToken : undefined}
+              className={`inline-flex items-center gap-2 rounded-[30px] border border-transparent px-2.5 py-1 ${
+                selectable ? 'bg-white/[0.13] hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-primaryStrong' : 'bg-transparent cursor-default'
+              }`}
+            >
+              <TokenGlyph symbol={tokenSymbol} size={18} />
+              <span className="token-pill-label">{tokenSymbol || 'USDC'}</span>
+              {selectable ? <ChevronDown className="h-4 w-4 text-white" /> : <InfoDot />}
+            </button>
+            {balance && (
+              <>
+                <p className="text-[12px] leading-[18px] text-[#61646c]">
+                  Balance: <span className="text-[#94969c]">{balance}</span>
+                </p>
+                {showActions && (
+                  <div className="flex items-center gap-2">
+                    <MiniActionButton>50%</MiniActionButton>
+                    <MiniActionButton>MAX</MiniActionButton>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ReceiveSection({ title, tokens, stacked }) {
+  return (
+    <div className="space-y-2">
+      <p className="text-base text-white">{title}</p>
+      <div className="rounded-[12px] border border-[#2d3038] bg-white/[0.04] px-3 py-3 space-y-3">
+        {stacked ? (
+          tokens.map((token) => <ReceiveRow key={token} token={token} />)
+        ) : (
+          <ReceiveRow token={tokens[0]} />
+        )}
+      </div>
+    </div>
+  )
+}
+
+function ReceiveRow({ token }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <p className="text-[36px] leading-[44px] tracking-[-0.04em] text-white">0.1</p>
+      <div className="flex items-center gap-2 text-[18px] font-medium">
+        <TokenGlyph symbol={token} size={22} />
+        <span>{token}</span>
+      </div>
+    </div>
+  )
+}
+
+function PrimaryActionButton({ label, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full rounded-[6px] bg-[#2870ff] py-3 text-center text-[16px] font-medium text-white hover:brightness-110 transition-colors"
+    >
+      {label}
+    </button>
+  )
+}
+
+function TokenPill({ symbol, onClick, showCaret = true }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex items-center gap-2 rounded-[30px] border border-transparent bg-white/[0.13] px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-primaryStrong disabled:cursor-default"
+      disabled={!onClick}
+    >
+      <TokenGlyph symbol={symbol} size={16} />
+      <span className="text-[14px] font-medium text-white">{symbol}</span>
+      {showCaret && <ChevronDown className="h-4 w-4 text-white" />}
+    </button>
+  )
+}
+
+function TokenGlyph({ symbol, size = 24 }) {
+  if (symbol === 'USDC') {
+    return <USDCIcon size={size} />
+  }
+  if (symbol === 'SUI') {
+    return <SuiIcon size={size} />
+  }
+  if (symbol === 'MMT') {
+    return <img src={mmtSuiLogo} alt="MMT" style={{ width: size, height: size }} className="rounded-full" />
+  }
+  if (symbol === 'NDLP') {
+    return <NdplIcon size={size} />
+  }
+  return <TokenIcon label={symbol?.charAt(0) || 'T'} gradient="linear-gradient(135deg, #0e6bff 0%, #53c6ff 100%)" />
+}
+
+function RateBadge() {
+  return (
+    <div className="relative flex h-6 w-6 items-center justify-center">
+      <svg viewBox="0 0 24 24" className="h-6 w-6 text-[#14c36b]" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="1.2" />
+        <path
+          d="M12 5.5c-2.2 0-4 1.8-4 4"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+        <path
+          d="M12 18.5c2.2 0 4-1.8 4-4"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+        <path
+          d="M10 16 8 14m6-8-2 2"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <span className="absolute inset-0 grid place-items-center text-[11px] font-bold text-[#14c36b]">7</span>
+    </div>
+  )
+}
+
+function RefreshBadge() {
+  return (
+    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#45464a] text-white/80">
+      <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
+        <path
+          d="M16.5 10a6.5 6.5 0 0 1-6.5 6.5A6.5 6.5 0 0 1 3.5 10"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+        <path
+          d="M3.5 10A6.5 6.5 0 0 1 10 3.5c1.85 0 3.5.78 4.67 2.03"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+        <path d="M5 8.5h3v3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  )
+}
+
+function MiniActionButton({ children }) {
+  return (
+    <button className="action-pill leading-none px-2.5 py-1 text-[12px]">{children}</button>
+  )
+}
+
+function NdplIcon({ size = 20 }) {
+  return (
+    <span
+      className="inline-flex items-center justify-center rounded-full"
+      style={{
+        width: size,
+        height: size,
+        background: 'radial-gradient(100% 100% at 30% 30%, #ffce00 0%, #f55500 100%)',
+        boxShadow: 'inset 0 0 0 2px #202126, inset 0 0 0 3px #f5e0c3',
+      }}
+    />
+  )
+}
+
+function InfoDot() {
+  return (
+    <span className="grid place-items-center rounded-full bg-[#45464a] text-white/80" style={{ width: 20, height: 20 }}>
+      i
+    </span>
+  )
+}
+
+function GearIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5 text-[#8b8f9b]">
+      <path
+        d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.5 10.5V9.5l1.3-.2a5 5 0 0 1 .5-1.2l-.8-1 1-1 .9.7c.4-.2.8-.4 1.2-.5l.2-1.3h2l.2 1.3c.4.1.8.3 1.2.5l1-.7 1 1-.7 1c.2.4.4.8.5 1.2l1.3.2v1l-1.3.2c-.1.4-.3.8-.5 1.2l.7 1-1 1-1-.7c-.4.2-.8.4-1.2.5l-.2 1.3h-2l-.2-1.3a5 5 0 0 1-1.2-.5l-1 .7-1-1 .7-1c-.2-.4-.4-.8-.5-1.2l-1.3-.2Z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function InfoCircle() {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" className="h-4 w-4 text-[#8b8f9b]">
+      <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M8 11V7.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <circle cx="8" cy="5" r=".75" fill="currentColor" />
+    </svg>
   )
 }
 
@@ -1128,45 +1495,114 @@ function ExplorerButton({ label, active }) {
 }
 
 function TokenSelectModal({ tokens, selected, onSelect, onClose }) {
+  const [query, setQuery] = useState('')
+  const filteredTokens = useMemo(() => {
+    const keyword = query.trim().toLowerCase()
+    if (!keyword) return tokens
+    return tokens.filter((token) => {
+      const parts = [
+        token.name,
+        token.symbol,
+        token.subtitle,
+        token.address,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+
+      return parts.includes(keyword)
+    })
+  }, [query, tokens])
+
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-[520px] max-w-[90vw] rounded-2xl bg-[#121318] border border-border shadow-panel">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-          <p className="text-lg font-semibold text-white">Select Token</p>
-          <button
-            onClick={onClose}
-            className="h-8 w-8 rounded-full bg-panel text-white grid place-items-center"
+    <div
+      className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
+      <div className="token-modal" onClick={(e) => e.stopPropagation()}>
+        <p className="token-modal__title">Select Token</p>
+
+        <div className="token-modal__search">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            aria-hidden="true"
           >
-            ×
+            <path
+              d="M12.75 12.75L16 16"
+              stroke="#7D8292"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <circle
+              cx="8.75"
+              cy="8.75"
+              r="4.75"
+              stroke="#7D8292"
+              strokeWidth="1.5"
+            />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search name, symbol or paste address"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="flex-1"
+          />
+          <button
+            type="button"
+            className="token-modal__reset"
+            aria-label="Clear search"
+            onClick={() => setQuery('')}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path
+                d="M10.5 3.5 3.5 10.5M3.5 3.5l7 7"
+                stroke="#7D8292"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+              />
+            </svg>
           </button>
         </div>
-        <div className="px-5 py-4 space-y-4">
-          <div className="rounded-lg border border-border bg-panel px-3 py-2 text-sm text-gray-300">
-            Search name or paste address
-          </div>
-          <div className="rounded-xl border border-border bg-panel overflow-hidden">
-            {tokens.map((token) => (
-              <button
-                key={token.symbol}
-                onClick={() => onSelect(token.symbol)}
-                className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-white/5 ${
-                  selected === token.symbol ? 'bg-white/10' : ''
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <TokenIcon label={token.symbol.charAt(0)} />
-                  <div className="flex flex-col">
-                    <span className="text-white text-base font-semibold">{token.symbol}</span>
-                    <span className="text-xs text-gray-400">{token.name}</span>
+
+        <div className="token-modal__list">
+          {filteredTokens.map((token) => (
+            <button
+              key={token.symbol}
+              onClick={() => onSelect(token.symbol)}
+              className={`token-modal__row ${
+                selected === token.symbol ? 'token-modal__row--selected' : ''
+              }`}
+            >
+              <div className="token-modal__left">
+                <TokenIcon
+                  label={token.symbol.charAt(0)}
+                  gradient={token.gradient}
+                  src={token.logo}
+                  size={32}
+                />
+                <div className="flex flex-col gap-[2px]">
+                  <div className="flex items-center gap-2">
+                    <span className="token-modal__symbol">{token.name}</span>
+                    {token.verified && <VerifiedBadge />}
                   </div>
+                  <span className="token-modal__subtitle">{token.subtitle ?? token.symbol}</span>
                 </div>
-                <div className="text-right text-sm text-gray-400">
-                  <p className="text-white font-semibold">{token.balance}</p>
-                  <p className="text-xs text-gray-500">{token.chain}</p>
-                </div>
-              </button>
-            ))}
-          </div>
+              </div>
+
+              <div className="token-modal__right">
+                <span className="token-modal__amount">{token.balance}</span>
+                <span className="token-modal__address">
+                  {token.address || token.chain}
+                  <ExternalMiniIcon />
+                </span>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     </div>
@@ -1251,27 +1687,78 @@ function Pagination() {
   )
 }
 
-function TokenIcon({ label, gradient }) {
+function TokenIcon({ label, gradient, size = 20, src }) {
+  const bg = gradient ?? '#1a1b21'
+  const fontSize = size >= 32 ? 16 : 14
+
   return (
     <div
-      className="h-[20px] w-[20px] rounded-full grid place-items-center text-white font-semibold text-sm border border-border"
+      className="grid place-items-center rounded-full text-white font-semibold border border-border"
       style={{
-        background:
-          gradient ??
-          'linear-gradient(135deg, #0e6bff 0%, #53c6ff 100%)',
+        width: size,
+        height: size,
+        background: bg,
+        fontSize,
       }}
     >
-      {label}
+      {src ? (
+        <img
+          src={src}
+          alt={`${label} logo`}
+          style={{ width: size * 0.7, height: size * 0.7, objectFit: 'contain' }}
+        />
+      ) : (
+        label
+      )}
     </div>
   )
 }
 
-function USDCIcon() {
+function VerifiedBadge() {
+  return (
+    <span className="token-verified" aria-label="Verified token">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="7" fill="#2E7BFF" />
+        <path
+          d="M11.2 6.2 7.125 10.2 4.8 8.1"
+          stroke="white"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  )
+}
+
+function ExternalMiniIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M4 8h4V4m0 0H4m4 0L6.5 5.5"
+        stroke="#7D8292"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function USDCIcon({ size = 32, className }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 64 64"
-      className="h-8 w-8"
+      className={className}
+      style={{ width: size, height: size }}
     >
       <circle cx="32" cy="32" r="32" fill="#2e7bff" />
       <path
@@ -1284,6 +1771,10 @@ function USDCIcon() {
       />
     </svg>
   )
+}
+
+function SuiIcon({ size = 24, className }) {
+  return <img src={suiSmall} alt="SUI" style={{ width: size, height: size }} className={className} />
 }
 
 function RoundedIcon({ children }) {
