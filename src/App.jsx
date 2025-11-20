@@ -495,19 +495,6 @@ function PositionsHero() {
           </div>
         </div>
       </div>
-
-      <div className="rounded-2xl border border-border bg-panelMuted">
-        <div className="border-b border-border px-5 py-4">
-          <p className="text-lg font-semibold text-white">All Time P&amp;L Breakdown</p>
-        </div>
-        <div className="px-5 py-4 space-y-2 text-sm text-gray-100">
-          <BreakdownRow label="Compounded Rewards" value="+$248" positive />
-          <BreakdownRow label="Impermanent Loss" value="-$173" />
-          <div className="pt-2 border-t border-border/80">
-            <BreakdownRow label="Net P&L" value="+$248" positive bold />
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
@@ -1198,19 +1185,19 @@ function OverviewSection() {
 function RiskSection() {
   return (
     <section className="mt-6 space-y-6">
-      <div className="glass-card shadow-panel p-5 space-y-4">
+      <div className="space-y-4 rounded-2xl border border-border bg-panelMuted p-5 shadow-panel">
         <div className="flex items-center justify-between">
           <p className="card-title">Risk Disclosures</p>
         </div>
         <div className="grid lg:grid-cols-[0.8fr,1.2fr] gap-6">
-          <div className="rounded-2xl border border-border bg-panelMuted p-4 space-y-3 text-sm text-gray-200">
+          <div className="space-y-3 rounded-2xl border border-border bg-panelMuted p-4 text-sm text-gray-200">
             <InfoRow label="Creator" value="51BB" helper="Contract Owner" />
             <InfoRow label="Date" value="2021-09-04" helper="Date of creation" />
             <InfoRow label="Gas Fee" value="SAFE 6/10" helper="Gas Fee & Surcharges" />
             <InfoRow label="Incentives" value="Loss" helper="Platform Incentives" />
             <InfoRow label="Audit" value="SAFE 7/10" helper="Vault version" />
           </div>
-          <div className="rounded-2xl border border-border bg-panelMuted p-4 space-y-3 text-sm text-gray-200 leading-relaxed">
+          <div className="space-y-3 rounded-2xl border border-border bg-panelMuted p-4 leading-relaxed text-sm text-gray-200">
             <p className="text-white font-semibold">Market Risk Disclosures</p>
             <p>
               Steakhouse-branded vaults are developed and operated by Cambrialo Tropical
@@ -1233,7 +1220,7 @@ function RiskSection() {
         </div>
       </div>
 
-      <div className="glass-card shadow-panel p-5 space-y-4">
+      <div className="space-y-4 rounded-2xl border border-border bg-panelMuted p-5 shadow-panel">
         <div className="flex items-center justify-between">
           <p className="card-title">Risk Curation</p>
         </div>
@@ -1248,21 +1235,21 @@ function RiskSection() {
             <AllocationChart />
           </div>
           <div className="rounded-xl border border-border bg-surface overflow-hidden">
-          <div className="hidden grid-cols-[2fr,1fr,1fr] border-b border-border px-4 py-3 text-xs uppercase tracking-wide text-muted md:grid">
-            <span>Date</span>
-            <span>Amount</span>
-            <span>Transaction</span>
-          </div>
-          <div className="divide-y divide-border">
-            {allocationHistory.map((row) => (
-              <div
-                key={row.date + row.tx}
-                className="grid grid-cols-1 items-start gap-3 px-4 py-3 text-sm text-gray-100 md:grid-cols-[2fr,1fr,1fr]"
-              >
-                <span>{row.date}</span>
-                <div className="flex items-center gap-2">
-                  <TokenIcon label="$" />
-                  <span>{row.amount}</span>
+            <div className="hidden grid-cols-[2fr,1fr,1fr] border-b border-border px-4 py-3 text-xs uppercase tracking-wide text-muted md:grid">
+              <span>Date</span>
+              <span>Amount</span>
+              <span>Transaction</span>
+            </div>
+            <div className="divide-y divide-border">
+              {allocationHistory.map((row) => (
+                <div
+                  key={row.date + row.tx}
+                  className="grid grid-cols-1 items-start gap-3 px-4 py-3 text-sm text-gray-100 md:grid-cols-[2fr,1fr,1fr]"
+                >
+                  <span>{row.date}</span>
+                  <div className="flex items-center gap-2">
+                    <TokenIcon label="$" />
+                    <span>{row.amount}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-primary">{row.tx}</span>
@@ -1280,8 +1267,8 @@ function RiskSection() {
 
 function DistributionSection() {
   return (
-    <section className="mt-6">
-      <div className="glass-card shadow-panel p-5 space-y-4">
+    <section className="mt-6 space-y-6">
+      <div className="space-y-4 rounded-2xl border border-border bg-panelMuted p-5 shadow-panel">
         <div className="flex items-center justify-between">
           <p className="card-title">User Distribution</p>
           <div className="flex items-center gap-2 text-sm text-muted">
@@ -1341,75 +1328,73 @@ function PositionsSection() {
   )
 
   return (
-    <section className="mt-6 space-y-6">
-      <div className="glass-card shadow-panel p-5 space-y-4">
-        <div className="grid gap-4 md:grid-cols-2">
-          <QuickStat
-            title="Total Liquidity"
-            value="4,926.00"
-            helper="≈ $5,216.00"
-            ringColor="#f7931a"
-          />
-          <QuickStat
-            title="Break-even"
-            value="$1.00"
-            helper="Current NDLP share price: $1.12"
-            ringColor="#3ab4ff"
-          />
-        </div>
+    <section className="mt-6 space-y-4 rounded-2xl border border-border bg-panelMuted p-5 shadow-panel">
+      <div className="space-y-4">
+        <QuickStat
+          title="Total Liquidity"
+          value="4,926.00"
+          helper="≈ $5,216.00"
+          ringColor="#f7931a"
+        />
+        <QuickStat
+          title="Break-even"
+          value="$1.00"
+          helper="Current NDLP share price: $1.12"
+          ringColor="#3ab4ff"
+        />
+      </div>
 
-        <div className="rounded-2xl border border-border bg-panelMuted">
-          <div className="border-b border-border px-5 py-4">
-            <p className="text-lg font-semibold text-white">All Time P&amp;L Breakdown</p>
-          </div>
-          <div className="px-5 py-4 space-y-2 text-sm text-gray-100">
-            <BreakdownRow label="Compounded Rewards" value="+$248" positive />
-            <BreakdownRow label="Impermanent Loss" value="-$173" />
-            <div className="pt-2 border-t border-border/80">
-              <BreakdownRow label="Net P&L" value="+$248" positive bold />
-            </div>
+      <div className="rounded-2xl border border-border bg-panelMuted">
+        <div className="border-b border-border px-5 py-4">
+          <p className="text-lg font-semibold text-white">All Time P&amp;L Breakdown</p>
+        </div>
+        <div className="px-5 py-4 space-y-2 text-sm text-gray-100">
+          <BreakdownRow label="Compounded Rewards" value="+$248" positive />
+          <BreakdownRow label="Impermanent Loss" value="-$173" />
+          <div className="pt-2 border-t border-border/80">
+            <BreakdownRow label="Net P&L" value="+$248" positive bold />
           </div>
         </div>
+      </div>
 
-        <div className="rounded-2xl border border-border bg-panelMuted p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <p className="text-lg font-semibold text-white">Estimated LP Breakdown</p>
-            <p className="text-xs text-muted">Secure updates ~1h • Updated 09:23:08</p>
-          </div>
-          <div className="grid md:grid-cols-[1.2fr,0.8fr] gap-6">
-            <div className="space-y-3">
-              {lpBreakdown.map((item) => (
-                <div key={item.label} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <TokenIcon label={item.label === 'USDC' ? 'U' : 'S'} />
-                    <div>
-                      <p className="font-semibold text-white">{item.label}</p>
-                      <p className="text-sm text-muted">{item.amount}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="rounded-full bg-panel px-3 py-1 text-sm font-semibold border border-border">
-                      {item.value ?? item.amount}
-                    </span>
-                    <span className="text-sm text-white">{item.percent}%</span>
+      <div className="rounded-2xl border border-border bg-panelMuted p-5 space-y-4">
+        <div className="flex items-center justify-between">
+          <p className="text-lg font-semibold text-white">Estimated LP Breakdown</p>
+          <p className="text-xs text-muted">Secure updates ~1h • Updated 09:23:08</p>
+        </div>
+        <div className="grid md:grid-cols-[1.2fr,0.8fr] gap-6">
+          <div className="space-y-3">
+            {lpBreakdown.map((item) => (
+              <div key={item.label} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <TokenIcon label={item.label === 'USDC' ? 'U' : 'S'} />
+                  <div>
+                    <p className="font-semibold text-white">{item.label}</p>
+                    <p className="text-sm text-muted">{item.amount}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-            <div className="flex items-center justify-center">
-              <div className="relative h-40 w-40 rounded-full border-8 border-panel" style={donutStyle}>
-                <div className="absolute inset-4 rounded-full bg-panel"></div>
+                <div className="flex items-center gap-3">
+                  <span className="rounded-full bg-panel px-3 py-1 text-sm font-semibold border border-border">
+                    {item.value ?? item.amount}
+                  </span>
+                  <span className="text-sm text-white">{item.percent}%</span>
+                </div>
               </div>
+            ))}
+          </div>
+          <div className="flex items-center justify-center">
+            <div className="relative h-40 w-40 rounded-full border-8 border-panel" style={donutStyle}>
+              <div className="absolute inset-4 rounded-full bg-panel"></div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="rounded-2xl border border-border bg-panelMuted p-5 space-y-3">
-          <p className="text-lg font-semibold text-white">Cashflow</p>
-          <div className="grid sm:grid-cols-2 gap-4 text-sm text-gray-100">
-            <InfoRow label="Total Deposits" value="$120,684" />
-            <InfoRow label="Total Withdrawals" value="$76,927" />
-          </div>
+      <div className="rounded-2xl border border-border bg-panelMuted p-5 space-y-3">
+        <p className="text-lg font-semibold text-white">Cashflow</p>
+        <div className="grid sm:grid-cols-2 gap-4 text-sm text-gray-100">
+          <InfoRow label="Total Deposits" value="$120,684" />
+          <InfoRow label="Total Withdrawals" value="$76,927" />
         </div>
       </div>
     </section>
