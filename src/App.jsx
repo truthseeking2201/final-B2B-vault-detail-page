@@ -196,7 +196,7 @@ function App() {
       <main className="w-full max-w-[1200px] mx-auto px-4 lg:px-6 pb-16">
         <div className="mt-6 flex w-full max-w-[1200px] flex-col items-start self-stretch rounded-[24px] border border-[#1F2937] bg-[#202126] p-6 lg:p-7">
           <div className="grid lg:grid-cols-[1.6fr,1fr] gap-6 items-start w-full">
-            <div className="space-y-6 order-2 lg:order-1">
+            <div className="space-y-6">
               <VaultHeader currency={currency} setCurrency={setCurrency} />
               <VaultTabs
                 mode={mode}
@@ -207,6 +207,17 @@ function App() {
               {mode === 'vault' ? (
                 <>
                   <VaultHero />
+                  <div className="lg:hidden">
+                    <DepositCard
+                      tab={depositTab}
+                      onTabChange={setDepositTab}
+                      zap={zap}
+                      onZapChange={setZap}
+                      onDeposit={depositHandler}
+                      selectedAsset={selectedAsset}
+                      onSelectAsset={() => setShowTokenModal(true)}
+                    />
+                  </div>
                   <SectionTabs section={section} onSectionChange={setSection} />
                   {section === 'overview' && <OverviewSection />}
                   {section === 'risk' && <RiskSection />}
@@ -217,7 +228,7 @@ function App() {
                 <PositionsSection />
               )}
             </div>
-            <div className="order-1 lg:order-2 lg:sticky lg:top-6 self-start w-full">
+            <div className="hidden lg:block lg:sticky lg:top-6 self-start w-full">
               <DepositCard
                 tab={depositTab}
                 onTabChange={setDepositTab}
