@@ -207,7 +207,7 @@ function TopBanner() {
 function NavBar() {
   return (
     <header className="border-b border-border bg-surface/80 backdrop-blur">
-      <div className="w-full max-w-[1200px] mx-auto px-4 lg:px-6 py-4 flex items-center gap-6">
+      <div className="w-full max-w-[1200px] mx-auto px-4 py-4 flex items-center gap-6">
         <Logo />
         <nav className="flex-1 hidden md:flex items-center gap-5 text-sm">
           {navLinks.map((item) => (
