@@ -1340,8 +1340,21 @@ function PositionsSection() {
 
   return (
     <section className="mt-6 space-y-4">
-      <div className="rounded-2xl border border-border bg-panelMuted p-5">
-        <div className="border-b border-border px-5 py-4">
+      <div
+        className="shadow-panel"
+        style={{
+          display: 'flex',
+          maxWidth: '720px',
+          padding: '17px',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '16px',
+          alignSelf: 'stretch',
+          borderRadius: '16px',
+          background: '#292A2F',
+        }}
+      >
+        <div className="border-b border-border px-5 py-4 w-full">
           <p className="text-lg font-semibold text-white">All Time P&amp;L Breakdown</p>
         </div>
         <div className="px-5 py-4 space-y-2 text-sm text-gray-100">
