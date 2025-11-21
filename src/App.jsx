@@ -185,6 +185,36 @@ const selectableTokens = [
   },
 ]
 
+function CurrencyToggle({ currency, setCurrency, className = '' }) {
+  return (
+    <div className={`inline-flex items-center gap-2 ${className}`}>
+      <div className="inline-flex rounded-full bg-[#151823] p-[2px]">
+        {['USD', 'SUI'].map((item) => {
+          const isActive = currency === item
+          return (
+            <button
+              key={item}
+              type="button"
+              onClick={() => setCurrency(item)}
+              className={
+                isActive
+                  ? 'flex items-center justify-center rounded-[6px] bg-[rgba(40,112,255,0.30)] px-4 py-[7.25px] text-[13.2px] leading-[16px] font-medium text-[#7EA9FF]'
+                  : 'flex items-center justify-center rounded-full px-3 py-2 text-[13.2px] leading-[16px] font-medium text-[#9096A5]'
+              }
+              style={{
+                fontFamily:
+                  'Work Sans, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+              }}
+            >
+              {item}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 function App() {
   const [mode, setMode] = useState('vault')
   const [section, setSection] = useState('overview')
@@ -211,7 +241,13 @@ function App() {
               <VaultTabs mode={mode} setMode={setMode} />
               {mode === 'vault' ? (
                 <>
-                  <VaultHero />
+                  <VaultHero
+                    mode={mode}
+                    section={section}
+                    setSection={setSection}
+                    currency={currency}
+                    setCurrency={setCurrency}
+                  />
                   <div className="lg:hidden">
                     <DepositCard
                       tab={depositTab}
@@ -325,30 +361,6 @@ function Logo() {
 }
 
 function VaultHeader({ currency, setCurrency }) {
-  const toggleButtons = (
-    <div className="flex items-center gap-2">
-      {['USD', 'SUI'].map((item) => {
-        const isActive = currency === item
-        return (
-          <button
-            key={item}
-            onClick={() => setCurrency(item)}
-            className={
-              isActive
-                ? 'flex items-center justify-center rounded-[6px] bg-[rgba(40,112,255,0.30)] px-[16px] py-[7.25px] text-[13.2px] leading-[16px] font-medium text-[#7EA9FF]'
-                : 'flex items-center justify-center rounded-full px-3 py-2 text-[13.2px] leading-[16px] font-medium text-[#9096A5]'
-            }
-            style={{
-              fontFamily: 'Work Sans, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
-            }}
-          >
-            {item}
-          </button>
-        )
-      })}
-    </div>
-  )
-
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2 text-sm text-gray-300">
@@ -387,9 +399,10 @@ function VaultHeader({ currency, setCurrency }) {
               </div>
             </div>
           </div>
-          <div className="hidden lg:flex">{toggleButtons}</div>
+          <div className="hidden lg:flex items-center">
+            <CurrencyToggle currency={currency} setCurrency={setCurrency} />
+          </div>
         </div>
-        <div className="flex justify-end lg:hidden w-full">{toggleButtons}</div>
       </div>
     </div>
   )
@@ -462,9 +475,16 @@ function SectionTabs({ section, onSectionChange }) {
   )
 }
 
-function VaultHero() {
+function VaultHero({ mode, section, setSection, currency, setCurrency }) {
+  void mode;
+  void section;
+  void setSection;
+
   return (
     <div className="space-y-5">
+      <div className="mt-4 mb-2 flex w-full justify-start lg:hidden">
+        <CurrencyToggle currency={currency} setCurrency={setCurrency} />
+      </div>
       <div className="grid w-full grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
         <StatBlock
           label="APY"
@@ -1540,8 +1560,31 @@ function StatsStrip() {
         </div>
         <div>
           <p className="text-[13px] text-[#aeb3c1]">Total Liquidity</p>
-          <p className="text-[20px] font-semibold leading-[24px]">$4,926.00</p>
-          <p className="text-[12px] text-[#8f95a6]">≈ $5,216.00</p>
+          <p
+            className="text-[#FAFBFC]"
+            style={{
+              fontFamily: '"Work Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+              fontSize: '28px',
+              fontStyle: 'normal',
+              fontWeight: 500,
+              lineHeight: '140%',
+            }}
+          >
+            $4,926.00
+          </p>
+          <p
+            className="text-[#8f95a6]"
+            style={{
+              color: 'rgba(255, 255, 255, 0.40)',
+              fontFamily: '"Work Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 500,
+              lineHeight: '16px',
+            }}
+          >
+            ≈ $5,216.00
+          </p>
         </div>
       </div>
 
@@ -1557,8 +1600,31 @@ function StatsStrip() {
         />
         <div>
           <p className="text-[13px] text-[#aeb3c1]">Break-even</p>
-          <p className="text-[20px] font-semibold leading-[24px]">$1.00</p>
-          <p className="text-[12px] text-[#8f95a6]">Current Vault Share price: $1.12</p>
+          <p
+            className="text-[#FAFBFC]"
+            style={{
+              fontFamily: '"Work Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+              fontSize: '28px',
+              fontStyle: 'normal',
+              fontWeight: 500,
+              lineHeight: '140%',
+            }}
+          >
+            $1.00
+          </p>
+          <p
+            className="text-[#8f95a6]"
+            style={{
+              color: 'rgba(255, 255, 255, 0.40)',
+              fontFamily: '"Work Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 500,
+              lineHeight: '16px',
+            }}
+          >
+            Current Vault Share price: $1.12
+          </p>
         </div>
       </div>
     </div>
