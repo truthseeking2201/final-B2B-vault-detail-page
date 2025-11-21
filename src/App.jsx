@@ -8,6 +8,8 @@ import nodoLogo from './assets/NODO Logo.svg'
 import usdcLogo from './assets/usdc.svg'
 import usdtLogo from './assets/usdt.svg'
 import wbtcLogo from './assets/wbtc.svg'
+import VaultSharePriceChart from './components/charts/VaultSharePriceChart'
+import PerformanceApyChart from './components/charts/PerformanceApyChart'
 
 const ZAP_IN_RATE = 1
 const ZAP_OUT_USDC_RATE = 1
@@ -513,7 +515,7 @@ function VaultHero({ mode, section, setSection, currency, setCurrency }) {
           chip crypto and real world asset (RWA) collateral markets, depending on market
           conditions. We call this the “dual engine.”
         </p>
-        <hr className="w-full border-t border-border" />
+        <div className="mt-4 mb-3 h-px w-full bg-[#4B4C50]" />
         <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
           {/* Left: 3 token columns */}
           <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6 lg:w-auto">
@@ -660,7 +662,7 @@ function TokenCluster({ label, token }) {
   return (
     <div className="flex flex-col gap-2 flex-shrink-0">
       <span
-        className="leading-[20px]"
+        className="leading-[20px] whitespace-nowrap"
         style={{
           color: '#94969C',
           fontFamily: 'Work Sans',
@@ -1285,7 +1287,7 @@ function OverviewSection() {
             <RoundedIcon>1D</RoundedIcon>
           </div>
           <div className="flex w-full flex-col gap-6 rounded-xl border border-[#1F2937] bg-[#202126] overflow-hidden">
-            <VaultShareChart />
+            <VaultSharePriceChart />
           </div>
         </div>
         <div className="flex flex-1 flex-col items-start justify-start gap-4 rounded-lg bg-white/5 p-5">
@@ -1294,7 +1296,7 @@ function OverviewSection() {
             <RoundedIcon>1D</RoundedIcon>
           </div>
           <div className="flex w-full flex-col gap-6 rounded-xl border border-[#1F2937] bg-[#202126] overflow-hidden">
-            <PerformanceChart />
+            <PerformanceApyChart />
           </div>
         </div>
       </div>
