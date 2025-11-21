@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import momentumLogo from './assets/logo-momentum.png'
 import mmtSuiLogo from './assets/mmt-sui.svg'
 import maxDrawdownIcon from './assets/icon-MaxDrawdown.svg'
@@ -130,6 +130,21 @@ const lpBreakdown = [
   },
 ]
 
+const WITHDRAW_COOLDOWN_SECONDS = 10
+
+function formatSecondsToHHMMSS(totalSeconds) {
+  const s = Math.max(0, totalSeconds || 0)
+  const hours = Math.floor(s / 3600)
+  const minutes = Math.floor((s % 3600) / 60)
+  const seconds = s % 60
+
+  const hh = hours.toString().padStart(2, '0')
+  const mm = minutes.toString().padStart(2, '0')
+  const ss = seconds.toString().padStart(2, '0')
+
+  return `${hh}:${mm}:${ss}`
+}
+
 const selectableTokens = [
   {
     symbol: 'xSUI',
@@ -242,9 +257,50 @@ function App() {
   const [showSuccess, setShowSuccess] = useState(false)
   const [selectedAsset, setSelectedAsset] = useState('xSUI')
   const [showTokenModal, setShowTokenModal] = useState(false)
+  const [withdrawFlow, setWithdrawFlow] = useState({
+    status: 'idle', // 'idle' | 'cooldown' | 'claimable'
+    amount: '',
+  })
+  const [withdrawSecondsLeft, setWithdrawSecondsLeft] = useState(0)
 
   const depositHandler = () => {
     setShowSuccess(true)
+  }
+
+  useEffect(() => {
+    if (withdrawFlow.status !== 'cooldown') return
+
+    setWithdrawSecondsLeft(WITHDRAW_COOLDOWN_SECONDS)
+
+    const intervalId = setInterval(() => {
+      setWithdrawSecondsLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(intervalId)
+          setWithdrawFlow((current) => ({
+            ...current,
+            status: 'claimable',
+          }))
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [withdrawFlow.status])
+
+  const handleWithdrawStart = ({ amount }) => {
+    setWithdrawFlow({
+      status: 'cooldown',
+      amount: amount || '',
+    })
+  }
+
+  const handleClaim = () => {
+    setWithdrawFlow({
+      status: 'idle',
+      amount: '',
+    })
   }
 
   return (
@@ -273,15 +329,20 @@ function App() {
                       tab={depositTab}
                       onTabChange={setDepositTab}
                       zap={zap}
-                      onZapChange={setZap}
-                      onDeposit={depositHandler}
-                      selectedAsset={selectedAsset}
-                      onSelectAsset={() => setShowTokenModal(true)}
-                    />
-                  </div>
-                  <VaultHero
-                    mode={mode}
-                    section={section}
+                    onZapChange={setZap}
+                    onDeposit={depositHandler}
+                    selectedAsset={selectedAsset}
+                    onSelectAsset={() => setShowTokenModal(true)}
+                    withdrawFlow={withdrawFlow}
+                    withdrawSecondsLeft={withdrawSecondsLeft}
+                    onWithdrawStart={handleWithdrawStart}
+                    onClaim={handleClaim}
+                    formatSecondsToHHMMSS={formatSecondsToHHMMSS}
+                  />
+                </div>
+                <VaultHero
+                  mode={mode}
+                  section={section}
                     setSection={setSection}
                     currency={currency}
                     setCurrency={setCurrency}
@@ -305,6 +366,11 @@ function App() {
                 onDeposit={depositHandler}
                 selectedAsset={selectedAsset}
                 onSelectAsset={() => setShowTokenModal(true)}
+                withdrawFlow={withdrawFlow}
+                withdrawSecondsLeft={withdrawSecondsLeft}
+                onWithdrawStart={handleWithdrawStart}
+                onClaim={handleClaim}
+                formatSecondsToHHMMSS={formatSecondsToHHMMSS}
               />
             </aside>
           </div>
@@ -712,15 +778,50 @@ function DepositCard({
   onDeposit,
   selectedAsset,
   onSelectAsset,
+  withdrawFlow,
+  withdrawSecondsLeft,
+  onWithdrawStart,
+  onClaim,
+  formatSecondsToHHMMSS,
 }) {
   const isWithdraw = tab === 'withdraw'
   const payoutToken = selectedAsset || 'USDC'
   const [depositAmount, setDepositAmount] = useState('')
   const [depositReceiveNdlp, setDepositReceiveNdlp] = useState('')
 
-  const [withdrawNdlpAmount, setWithdrawNdlpAmount] = useState('')
+  const [withdrawAmount, setWithdrawAmount] = useState('')
   const [withdrawReceiveUsdc, setWithdrawReceiveUsdc] = useState('')
   const [withdrawReceiveSui, setWithdrawReceiveSui] = useState('')
+  const withdrawStatus = withdrawFlow?.status || 'idle'
+  const isWithdrawTab = tab === 'withdraw'
+  const isCooldown = isWithdrawTab && withdrawStatus === 'cooldown'
+  const isClaimable = isWithdrawTab && withdrawStatus === 'claimable'
+  const isInClaimPhase = isCooldown || isClaimable
+
+  const handlePrimaryClick = () => {
+    if (!isWithdrawTab) {
+      onDeposit?.()
+      return
+    }
+
+    if (isInClaimPhase) {
+      if (isClaimable) {
+        onClaim?.()
+      }
+      return
+    }
+
+    onWithdrawStart?.({
+      amount: withdrawAmount,
+    })
+  }
+
+  let primaryLabel = 'Deposit'
+  if (isWithdrawTab) {
+    primaryLabel = isInClaimPhase ? 'Claim' : 'Withdraw'
+  }
+
+  const primaryDisabled = isWithdrawTab && isInClaimPhase && !isClaimable
 
   return (
     <div className="w-full rounded-[12px] border border-[#2870ff] bg-[#202126] p-[17px] shadow-panel text-white space-y-4">
@@ -734,13 +835,17 @@ function DepositCard({
           zap={zap}
           payoutToken={payoutToken}
           onSelectAsset={onSelectAsset}
-          onDeposit={onDeposit}
-          withdrawNdlpAmount={withdrawNdlpAmount}
-          setWithdrawNdlpAmount={setWithdrawNdlpAmount}
+          withdrawAmount={withdrawAmount}
+          setWithdrawAmount={setWithdrawAmount}
           withdrawReceiveUsdc={withdrawReceiveUsdc}
           withdrawReceiveSui={withdrawReceiveSui}
           setWithdrawReceiveUsdc={setWithdrawReceiveUsdc}
           setWithdrawReceiveSui={setWithdrawReceiveSui}
+          isInClaimPhase={isInClaimPhase}
+          isCooldown={isCooldown}
+          isClaimable={isClaimable}
+          withdrawSecondsLeft={withdrawSecondsLeft}
+          formatSecondsToHHMMSS={formatSecondsToHHMMSS}
         />
       ) : (
         <DepositBody
@@ -754,6 +859,11 @@ function DepositCard({
           setDepositReceiveNdlp={setDepositReceiveNdlp}
         />
       )}
+      <PrimaryActionButton
+        label={primaryLabel}
+        onClick={handlePrimaryClick}
+        disabled={primaryDisabled}
+      />
     </div>
   )
 }
@@ -814,7 +924,6 @@ function DepositBody({
         tokens={['NDLP']}
         amounts={{ NDLP: depositReceiveNdlp === '' ? '0.0' : depositReceiveNdlp }}
       />
-      <PrimaryActionButton label="Deposit" onClick={onDeposit} />
     </>
   )
 }
@@ -823,13 +932,17 @@ function WithdrawBody({
   zap,
   payoutToken,
   onSelectAsset,
-  onDeposit,
-  withdrawNdlpAmount,
-  setWithdrawNdlpAmount,
+  withdrawAmount,
+  setWithdrawAmount,
   withdrawReceiveUsdc,
   withdrawReceiveSui,
   setWithdrawReceiveUsdc,
   setWithdrawReceiveSui,
+  isInClaimPhase,
+  isCooldown,
+  isClaimable,
+  withdrawSecondsLeft,
+  formatSecondsToHHMMSS,
 }) {
   const receiveTokens = ['USDC', 'SUI']
   const isZapOut = zap
@@ -870,16 +983,19 @@ function WithdrawBody({
 
       {zap && (
         <SelectorRow label="Select Payout Token">
-          <TokenPill symbol={payoutToken} onClick={onSelectAsset} />
+          <div className={isInClaimPhase ? 'opacity-70 pointer-events-none' : ''}>
+            <TokenPill symbol={payoutToken} onClick={onSelectAsset} />
+          </div>
         </SelectorRow>
       )}
 
       <AmountSection
         title="Withdraw Amount"
         editable
-        inputValue={withdrawNdlpAmount}
+        inputValue={withdrawAmount}
         onInputChange={(value) => {
-          setWithdrawNdlpAmount(value)
+          if (isInClaimPhase) return
+          setWithdrawAmount(value)
           if (zap) {
             const n = parseAmount(value)
             setWithdrawReceiveUsdc(value === '' ? '' : (n * ZAP_OUT_USDC_RATE).toString())
@@ -889,6 +1005,7 @@ function WithdrawBody({
             setWithdrawReceiveSui('')
           }
         }}
+        disabled={isInClaimPhase}
         fiatHint="$0.20"
         tokenSymbol="NDLP"
         balance="0.108256258"
@@ -897,11 +1014,19 @@ function WithdrawBody({
 
       <ReceiveSection
         title="Est. Max Receive"
+        helper={
+          <>
+            {isCooldown && (
+              <p className="mt-1 text-xs text-gray-400">
+                Ready to claim in {formatSecondsToHHMMSS(withdrawSecondsLeft)}
+              </p>
+            )}
+            {isClaimable && <p className="mt-1 text-xs text-gray-400">Ready to claim</p>}
+          </>
+        }
         tokens={receiveTokensToRender}
         amounts={receiveAmounts}
       />
-
-      <PrimaryActionButton label="Withdraw" onClick={onDeposit} />
     </>
   )
 }
@@ -1111,10 +1236,13 @@ function AmountSection({
   )
 }
 
-function ReceiveSection({ title, tokens, stacked, amounts }) {
+function ReceiveSection({ title, tokens, stacked, amounts, helper }) {
   return (
     <div className="space-y-2">
-      <p className="text-base text-white">{title}</p>
+      <div>
+        <p className="text-base text-white">{title}</p>
+        {helper}
+      </div>
       <div className="rounded-[12px] border border-[#2d3038] bg-white/[0.04] px-3 py-3 space-y-3">
         {tokens.map((token) => (
           <ReceiveRow
@@ -1146,10 +1274,11 @@ function ReceiveRow({ token, amount, compact }) {
   )
 }
 
-function PrimaryActionButton({ label, onClick }) {
+function PrimaryActionButton({ label, onClick, disabled }) {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className="w-full rounded-[6px] bg-[#2870ff] py-3 text-center text-[16px] font-medium text-white hover:brightness-110 transition-colors"
     >
       {label}
