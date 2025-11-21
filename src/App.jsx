@@ -235,7 +235,7 @@ function App() {
     <div className="min-h-screen bg-surface">
       <TopBanner />
       <NavBar />
-      <main className="w-full max-w-[1200px] mx-auto px-4 lg:px-6 pb-16">
+      <main className="w-full max-w-[1300px] mx-auto px-4 lg:px-6 pb-16">
         <div className="mt-6 flex w-full max-w-[1200px] flex-col items-start self-stretch rounded-[24px] border border-[#1F2937] bg-[#202126] p-6 lg:p-7">
           <div className="flex items-center gap-2 text-sm text-gray-300">
             <div className="h-8 w-8 grid place-items-center rounded-full bg-panelMuted border border-border">
