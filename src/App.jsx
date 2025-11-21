@@ -451,31 +451,25 @@ function SectionTabs({ section, onSectionChange }) {
 function VaultHero() {
   return (
     <div className="space-y-5">
-      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-6 lg:gap-8">
-        <div className="w-full">
-          <StatBlock
-            label="APY"
-            value="26.82%"
-            helper="+2.82% last 24h"
-            positive
-            icon={<SparkIcon />}
-          />
-        </div>
-        <div className="w-full">
-          <StatBlock
-            label="Total Deposits"
-            renderContent={<TotalDepositsBlock />}
-          />
-        </div>
-        <div className="w-full">
-          <StatBlock
-            label="Vault Share Price"
-            value="0.425"
-            helper="+12.82% last 24h"
-            positive
-            prefix={<PriceIcon />}
-          />
-        </div>
+      <div className="grid w-full grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+        <StatBlock
+          label="APY"
+          value="26.82%"
+          helper="+2.82% last 24h"
+          positive
+          icon={<SparkIcon />}
+        />
+        <StatBlock
+          label="Total Deposits"
+          renderContent={<TotalDepositsBlock />}
+        />
+        <StatBlock
+          label="Vault Share Price"
+          value="0.425"
+          helper="+12.82% last 24h"
+          positive
+          prefix={<PriceIcon />}
+        />
       </div>
 
       <div className="flex w-full flex-col items-start self-stretch gap-6 rounded-[16px] border border-border bg-[#2B2C31] px-5 py-[17px] text-sm text-gray-100">
