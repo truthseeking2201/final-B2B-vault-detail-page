@@ -1682,7 +1682,7 @@ function PnLRow({ label, value, color, bold }) {
   )
 }
 
-function LpBreakdownCard({ donutStyle }) {
+function LpBreakdownCard() {
   const pillStyle = {
     padding: '6px 12px',
     borderRadius: '14px',
