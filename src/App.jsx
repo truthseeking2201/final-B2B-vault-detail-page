@@ -236,7 +236,7 @@ function App() {
       <TopBanner />
       <NavBar />
       <main className="w-full max-w-[1300px] mx-auto px-4 lg:px-6 pb-16">
-        <div className="mt-6 flex w-full max-w-[1200px] flex-col items-start self-stretch rounded-[24px] border border-[#1F2937] bg-[#202126] p-6 lg:p-7">
+        <div className="mt-6 flex w-full max-w-[1200px] mx-auto flex-col items-start self-stretch rounded-[24px] border border-[#1F2937] bg-[#202126] p-6 lg:p-7">
           <div className="flex items-center gap-2 text-sm text-gray-300">
             <div className="h-8 w-8 grid place-items-center rounded-full bg-panelMuted border border-border">
               <ArrowLeft />
@@ -1656,28 +1656,29 @@ function AllTimePnLCard() {
     >
       <p className="text-[20px] font-semibold text-white">All Time P&amp;L Breakdown</p>
       <div className="w-full h-px bg-[#32343e]" />
-      <div className="flex flex-col gap-3 text-[15px]">
-        <PnLRow label="Compounded Rewards" value="+$248" color="#29d78c" />
-        <PnLRow label="Impermanent Loss" value="-$173" color="#d2d6de" />
-        <PnLRow label="Net P&L" value="+$248" color="#29d78c" bold />
-      </div>
-    </div>
-  )
-}
+      <div className="flex w-full flex-col gap-3 text-[15px]">
+        <div className="flex items-center justify-between">
+          <button className="flex items-center gap-2 text-sm text-[#c4c8d2]">
+            <span>Compounded Rewards</span>
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#3E3F43]">
+              <ChevronRightIcon className="h-3 w-3 text-[#c4c8d2]" />
+            </span>
+          </button>
+          <span className="text-emerald-400 text-sm font-semibold">+$248</span>
+        </div>
 
-function PnLRow({ label, value, color, bold }) {
-  return (
-    <div className="flex items-center justify-between gap-2">
-      <span className="text-[#c4c8d2]">{label}</span>
-      <span
-        className="text-right"
-        style={{
-          color,
-          fontWeight: bold ? 700 : 600,
-        }}
-      >
-        {value}
-      </span>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-[#c4c8d2]">Impermanent Loss</span>
+          <span className="text-[#FF7A45] text-sm font-semibold">-$173</span>
+        </div>
+
+        <div className="my-4 w-full" style={{ height: '1px', background: '#4B4C50' }} />
+
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-[#c4c8d2]">Net P&L</span>
+          <span className="text-emerald-400 text-sm font-semibold">+$248</span>
+        </div>
+      </div>
     </div>
   )
 }
@@ -2218,6 +2219,20 @@ function ChevronDown({ className }) {
     <svg viewBox="0 0 24 24" fill="none" className={className ?? 'h-4 w-4 text-gray-200'}>
       <path
         d="M6 9l6 6 6-6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function ChevronRightIcon({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 12" fill="none" className={className}>
+      <path
+        d="m1 1 5 5-5 5"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
