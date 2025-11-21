@@ -208,12 +208,7 @@ function App() {
           <div className="grid lg:grid-cols-[1.6fr,1fr] gap-6 items-start w-full">
             <div className="space-y-6">
               <VaultHeader currency={currency} setCurrency={setCurrency} />
-              <VaultTabs
-                mode={mode}
-                section={section}
-                onModeChange={setMode}
-                onSectionChange={setSection}
-              />
+              <VaultTabs mode={mode} setMode={setMode} />
               {mode === 'vault' ? (
                 <>
                   <VaultHero />
@@ -400,24 +395,43 @@ function VaultHeader({ currency, setCurrency }) {
   )
 }
 
-function VaultTabs({ mode, section, onModeChange, onSectionChange }) {
+function VaultTabs({ mode, setMode }) {
+  const tabs = [
+    { id: 'vault', label: 'Vault' },
+    { id: 'positions', label: 'Positions' },
+  ];
+
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-3 text-base font-semibold text-gray-300 sm:gap-6">
-        {['vault', 'positions'].map((item) => (
+    <div className="flex items-center gap-8">
+      {tabs.map((tab) => {
+        const isActive = mode === tab.id
+
+        return (
           <button
-            key={item}
-            onClick={() => onModeChange(item)}
-            className={`flex flex-col items-center rounded-[6px] px-4 pt-[7.25px] pb-[7.77px] ${
-              mode === item
-                ? 'bg-[rgba(40,112,255,0.30)] text-[#7EA9FF]'
-                : 'text-gray-300 hover:text-white'
-            }`}
+            key={tab.id}
+            type="button"
+            onClick={() => setMode(tab.id)}
+            className="relative overflow-hidden text-ellipsis whitespace-nowrap"
+            style={{
+              fontFamily: 'Work Sans, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+            }}
           >
-            {item === 'vault' ? 'Vault' : 'Positions'}
+            <span
+              className={
+                isActive
+                  ? 'text-[#FAFAFA] text-[20px] leading-[31.92px] font-medium'
+                  : 'text-[#94969C] text-[20px] leading-[31.92px] font-normal'
+              }
+            >
+              {tab.label}
+            </span>
+
+            {isActive && (
+              <span className="mt-1 block h-[3px] w-full rounded-full bg-[#FAFAFA]" />
+            )}
           </button>
-        ))}
-      </div>
+        )
+      })}
     </div>
   )
 }
