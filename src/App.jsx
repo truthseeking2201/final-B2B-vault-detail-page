@@ -1539,20 +1539,11 @@ function DistributionSection() {
 }
 
 function PositionsSection() {
-  const donutStyle = useMemo(
-    () => ({
-      background: `conic-gradient(#3ab4ff 0% ${
-        lpBreakdown[0].percent
-      }%, #3f4fff ${lpBreakdown[0].percent}% 100%)`,
-    }),
-    [],
-  )
-
   return (
     <section className="mt-6 space-y-4">
       <StatsStrip />
       <AllTimePnLCard />
-      <LpBreakdownCard donutStyle={donutStyle} />
+      <LpBreakdownCard />
       <CashflowCard />
     </section>
   )

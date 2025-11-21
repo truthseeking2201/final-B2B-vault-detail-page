@@ -13,7 +13,7 @@ export default function VaultSharePriceChart() {
   const [hoverIndex, setHoverIndex] = useState(null)
   const svgRef = useRef(null)
 
-  const { points, minY, maxY } = useMemo(() => {
+  const { points } = useMemo(() => {
     const min = Math.min(...vaultSharePriceData.map((d) => d.sharePrice))
     const max = Math.max(...vaultSharePriceData.map((d) => d.sharePrice))
     const range = max - min || 1
@@ -27,7 +27,7 @@ export default function VaultSharePriceChart() {
       return { ...d, x, y }
     })
 
-    return { points: pts, minY: min, maxY: max }
+    return { points: pts }
   }, [])
 
   const pathD = useMemo(() => {
