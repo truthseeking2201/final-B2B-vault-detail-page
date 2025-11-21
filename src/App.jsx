@@ -832,6 +832,26 @@ function WithdrawBody({
   setWithdrawReceiveSui,
 }) {
   const receiveTokens = ['USDC', 'SUI']
+  const isZapOut = zap
+  const payout = payoutToken || 'USDC'
+
+  const getReceiveAmount = (symbol) => {
+    if (symbol === 'USDC') {
+      return withdrawReceiveUsdc === '' ? '0.0' : withdrawReceiveUsdc
+    }
+    if (symbol === 'SUI' || symbol === 'xSUI') {
+      return withdrawReceiveSui === '' ? '0.0' : withdrawReceiveSui
+    }
+    return '0.0'
+  }
+
+  const receiveTokensToRender = isZapOut ? [payout] : receiveTokens
+  const receiveAmounts = isZapOut
+    ? { [payout]: getReceiveAmount(payout) }
+    : {
+        USDC: getReceiveAmount('USDC'),
+        SUI: getReceiveAmount('SUI'),
+      }
 
   return (
     <>
@@ -877,11 +897,8 @@ function WithdrawBody({
 
       <ReceiveSection
         title="Est. Max Receive"
-        tokens={receiveTokens}
-        amounts={{
-          USDC: withdrawReceiveUsdc === '' ? '0.0' : withdrawReceiveUsdc,
-          SUI: withdrawReceiveSui === '' ? '0.0' : withdrawReceiveSui,
-        }}
+        tokens={receiveTokensToRender}
+        amounts={receiveAmounts}
       />
 
       <PrimaryActionButton label="Withdraw" onClick={onDeposit} />
