@@ -451,8 +451,8 @@ function SectionTabs({ section, onSectionChange }) {
 function VaultHero() {
   return (
     <div className="space-y-5">
-      <div className="flex w-full gap-3 overflow-x-auto pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:pb-0">
-        <div className="min-w-[180px] snap-start sm:min-w-0">
+      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3 md:gap-6 lg:gap-8">
+        <div className="w-full">
           <StatBlock
             label="APY"
             value="26.82%"
@@ -461,13 +461,13 @@ function VaultHero() {
             icon={<SparkIcon />}
           />
         </div>
-        <div className="min-w-[180px] snap-start sm:min-w-0">
+        <div className="w-full">
           <StatBlock
             label="Total Deposits"
             renderContent={<TotalDepositsBlock />}
           />
         </div>
-        <div className="min-w-[180px] snap-start sm:min-w-0">
+        <div className="w-full">
           <StatBlock
             label="Vault Share Price"
             value="0.425"
@@ -497,11 +497,11 @@ function VaultHero() {
           <div className="flex w-full flex-col gap-1 text-base text-gray-100 lg:w-auto lg:text-right">
             <div className="flex items-baseline gap-2 text-gray-300 lg:justify-end lg:self-end">
               <span className="text-white font-semibold">2%</span>
-              <span className="text-gray-400">Management Fee</span>
+              <span className="text-gray-400 whitespace-nowrap">Management Fee</span>
             </div>
             <div className="flex items-baseline gap-2 text-gray-300 lg:justify-end lg:self-end">
               <span className="text-white font-semibold">14.2%</span>
-              <span className="text-gray-400">Performance Fee</span>
+              <span className="text-gray-400 whitespace-nowrap">Performance Fee</span>
             </div>
           </div>
         </div>
@@ -516,18 +516,34 @@ function PositionsHero() {
       <div className="grid sm:grid-cols-2 gap-6">
         <div className="rounded-2xl border border-border bg-panelMuted px-4 py-3">
           <p className="text-sm text-muted">Total Liquidity</p>
-            <div className="flex items-center gap-3 mt-2">
-              <RingGauge />
-              <div>
-                <p className="stat-highlight">4,926.00</p>
-                <p className="text-sm text-muted">≈ $5,216.00</p>
-              </div>
+          <div className="flex items-center gap-3 mt-2">
+            <RingGauge />
+            <div>
+              <p
+                className="text-[#FAFBFC] text-[28px] font-medium leading-[140%]"
+                style={{
+                  fontFamily: '"Work Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+                  fontStyle: 'normal',
+                }}
+              >
+                4,926.00
+              </p>
+              <p className="text-sm text-muted">≈ $5,216.00</p>
             </div>
+          </div>
           </div>
         <div className="rounded-2xl border border-border bg-panelMuted px-4 py-3">
           <p className="text-sm text-muted">Break-even</p>
           <div className="flex items-center gap-3 mt-2">
-            <p className="stat-highlight">$1.00</p>
+            <p
+              className="text-[#FAFBFC] text-[28px] font-medium leading-[140%]"
+              style={{
+                fontFamily: '"Work Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+                fontStyle: 'normal',
+              }}
+            >
+              $1.00
+            </p>
             <p className="text-sm text-muted">Current Vault Shares price: $1.12</p>
           </div>
         </div>
@@ -632,7 +648,7 @@ function TokenCluster({ label, token }) {
           label={token.name.charAt(0)}
           gradient={`linear-gradient(135deg, ${token.color} 0%, #0b62ff 100%)`}
         />
-        <span className="leading-none">{token.name}</span>
+        <span className="text-sm font-medium text-gray-100 whitespace-nowrap">{token.name}</span>
         <RoundedIcon>
           <ExternalIcon />
         </RoundedIcon>
