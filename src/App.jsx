@@ -235,7 +235,7 @@ function App() {
       <NavBar />
       <main className="w-full max-w-[1200px] mx-auto px-4 lg:px-6 pb-16">
         <div className="mt-6 flex w-full max-w-[1200px] flex-col items-start self-stretch rounded-[24px] border border-[#1F2937] bg-[#202126] p-6 lg:p-7">
-          <div className="grid lg:grid-cols-[1.6fr,1fr] gap-6 items-start w-full">
+          <div className="grid lg:grid-cols-[1.6fr,1fr] w-full gap-6 lg:items-start">
             <div className="space-y-6">
               <VaultHeader currency={currency} setCurrency={setCurrency} />
               <VaultTabs mode={mode} setMode={setMode} />
@@ -269,7 +269,7 @@ function App() {
                 <PositionsSection />
               )}
             </div>
-            <div className="hidden lg:block lg:sticky lg:top-6 self-start w-full">
+            <div className="hidden lg:block lg:sticky lg:top-6 self-start w-full mt-6 lg:mt-0 lg:self-start">
               <DepositCard
                 tab={depositTab}
                 onTabChange={setDepositTab}
@@ -941,7 +941,13 @@ function SingleDepositInput({ amount, fiat, token, balance, onSelectToken, onCha
             inputMode="decimal"
             value={amount}
             onChange={(e) => onChangeAmount?.(e.target.value)}
-            className="w-full bg-transparent text-[32px] font-semibold leading-none outline-none"
+            className="w-full bg-transparent text-[32px] leading-none outline-none"
+            style={{
+              color: 'rgb(250 250 250 / var(--tw-text-opacity, 1))',
+              fontFamily: '"Work Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+              fontSize: '36px',
+              fontWeight: 400,
+            }}
             placeholder="0.0"
           />
           <p className="text-[20px] leading-[28px] text-[rgba(133,136,142,0.6)]">{fiat}</p>
@@ -1020,7 +1026,14 @@ function AmountSection({
                 inputMode="decimal"
                 value={inputValue}
                 onChange={(e) => onInputChange?.(e.target.value)}
-                className="w-full bg-transparent text-[32px] font-semibold leading-none outline-none"
+                className="w-full bg-transparent text-[32px] leading-none outline-none"
+                style={{
+                  color: 'rgb(250 250 250 / var(--tw-text-opacity, 1))',
+                  fontFamily:
+                    'Work Sans, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+                  fontSize: '36px',
+                  fontWeight: 400,
+                }}
                 placeholder="0.0"
               />
             ) : (
