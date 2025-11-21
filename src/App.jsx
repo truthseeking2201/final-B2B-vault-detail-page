@@ -110,8 +110,24 @@ const allocationHistory = [
 ]
 
 const lpBreakdown = [
-  { label: 'USDC', percent: 62, amount: '$100,084,918', color: '#3ab4ff' },
-  { label: 'SUI', percent: 38, amount: '$400,000,248', color: '#6e7cff' },
+  {
+    label: 'USDC',
+    percent: 62,
+    amount: '$100,084,918',
+    color: '#4CC2FF',
+    display: '100,084,918 USDC',
+    subtitle: '$100,084,918',
+    icon: usdcLogo,
+  },
+  {
+    label: 'SUI',
+    percent: 38,
+    amount: '$400,000,248',
+    color: '#C28CFF',
+    display: '100,084,918 SUI',
+    subtitle: '$400,000,248',
+    icon: suiSmall,
+  },
 ]
 
 const selectableTokens = [
@@ -1538,6 +1554,42 @@ function DistributionSection() {
   )
 }
 
+function LpDonut() {
+  return (
+    <div className="flex items-center justify-center">
+      <div
+        className="h-[140px] w-[140px] rounded-full"
+        style={{
+          background:
+            'conic-gradient(#55B8FF 0deg, #55B8FF 220deg, #B38CFF 220deg, #B38CFF 360deg)',
+          padding: '12px',
+        }}
+      >
+        <div className="h-full w-full rounded-full bg-[#15161B]" />
+      </div>
+    </div>
+  )
+}
+
+function LpBreakdownRow({ color, icon, label, subtitle, percent, amount }) {
+  return (
+    <div className="flex items-center justify-between gap-4 self-stretch rounded-[12px] bg-[#202126] px-4 py-2">
+      <div className="flex items-center gap-3">
+        <span className="h-3 w-3 rounded-full" style={{ backgroundColor: color }} />
+        <img src={icon} alt="" className="h-6 w-6" />
+        <div className="flex flex-col">
+          <span className="text-sm font-medium text-white">{label}</span>
+          <span className="text-xs text-gray-400">{subtitle}</span>
+        </div>
+      </div>
+      <div className="text-right">
+        <div className="text-sm font-semibold text-white">{percent}</div>
+        <div className="text-xs text-gray-400">{amount}</div>
+      </div>
+    </div>
+  )
+}
+
 function PositionsSection() {
   return (
     <section className="mt-6 space-y-4">
@@ -1640,20 +1692,7 @@ function StatsStrip() {
 
 function AllTimePnLCard() {
   return (
-    <div
-      className="shadow-panel"
-      style={{
-        display: 'flex',
-        padding: '20px',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        gap: '16px',
-        alignSelf: 'stretch',
-        borderRadius: '16px',
-        background: '#26272f',
-        border: '1px solid #1f2128',
-      }}
-    >
+    <div className="flex max-w-[720px] flex-col items-start gap-4 self-stretch rounded-[16px] bg-[#292A2F] p-[17px]">
       <p className="text-[20px] font-semibold text-white">All Time P&amp;L Breakdown</p>
       <div className="w-full h-px bg-[#32343e]" />
       <div className="flex w-full flex-col gap-3 text-[15px]">
@@ -1672,7 +1711,7 @@ function AllTimePnLCard() {
           <span className="text-[#FF7A45] text-sm font-semibold">-$173</span>
         </div>
 
-        <div className="my-4 w-full" style={{ height: '1px', background: '#4B4C50' }} />
+        <div className="my-4 w-full border-t border-[#4B4C50]" />
 
         <div className="flex items-center justify-between">
           <span className="text-sm text-[#c4c8d2]">Net P&L</span>
@@ -1684,79 +1723,31 @@ function AllTimePnLCard() {
 }
 
 function LpBreakdownCard() {
-  const pillStyle = {
-    padding: '6px 12px',
-    borderRadius: '14px',
-    background: '#0e1420',
-    border: '1px solid #101722',
-    color: '#e8ebf2',
-    fontWeight: 700,
-    fontSize: '13px',
-    lineHeight: '18px',
-    boxShadow: '0 6px 14px rgba(0,0,0,0.25)',
-  }
-
   return (
-    <div
-      className="shadow-panel"
-      style={{
-        display: 'flex',
-        padding: '17px',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        gap: '18px',
-        alignSelf: 'stretch',
-        borderRadius: '16px',
-        background: '#292A2F',
-        border: '1px solid #1f2128',
-      }}
-    >
-      <div className="flex flex-wrap items-center gap-2 text-sm text-[#8f95a6] w-full">
-        <p className="text-[18px] font-semibold text-white">Estimated LP Breakdown</p>
-        <span className="text-[13px] text-[#8f95a6]">Secure updates ~1h • Updated 09:23:08</span>
+    <div className="flex max-w-[720px] flex-col items-start gap-4 self-stretch rounded-[16px] bg-[#292A2F] p-[17px]">
+      <div className="flex w-full flex-col gap-1">
+        <h3 className="text-base font-semibold text-white">Estimated LP Breakdown</h3>
+        <p className="text-[12px] text-gray-400">
+          Secure updates ~1h • Updated 09:23:08
+        </p>
       </div>
 
-      <div className="grid md:grid-cols-[1.1fr,0.9fr] gap-4 w-full items-center">
-        <div className="flex flex-col gap-4">
+      <div className="flex w-full items-center gap-8">
+        <div className="flex flex-1 flex-col gap-3">
           {lpBreakdown.map((item) => (
-            <div key={item.label} className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <TokenIcon
-                  label={item.label === 'USDC' ? 'U' : 'S'}
-                  gradient="linear-gradient(135deg,#0e6bff 0%,#111827 100%)"
-                  size={32}
-                />
-                <div className="leading-tight">
-                  <p className="text-[15px] font-semibold text-white">{item.label}</p>
-                  <p className="text-[13px] text-[#8f95a6]">{item.amount}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <span style={pillStyle}>{item.amount}</span>
-                <span className="text-[14px] font-semibold text-white">{item.percent}%</span>
-              </div>
-            </div>
+            <LpBreakdownRow
+              key={item.label}
+              color={item.color}
+              icon={item.icon}
+              label={item.display}
+              subtitle={item.subtitle}
+              percent={`${item.percent}%`}
+              amount={item.amount}
+            />
           ))}
         </div>
-        <div className="flex items-center justify-center">
-          <div
-            className="relative"
-            style={{
-              width: '160px',
-              height: '160px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle at 50% 50%, #12141b 58%, transparent 60%)',
-              boxShadow: 'inset 0 0 0 12px #0f1118',
-            }}
-          >
-            <div
-              className="absolute inset-[12px] rounded-full"
-              style={{
-                background: `conic-gradient(#2e7bff 0% ${lpBreakdown[0].percent}%, #171820 ${lpBreakdown[0].percent}% 100%)`,
-              }}
-            />
-            <div className="absolute inset-[26px] rounded-full bg-[#0f1118]" />
-          </div>
+        <div className="hidden md:flex">
+          <LpDonut />
         </div>
       </div>
     </div>
@@ -1765,19 +1756,7 @@ function LpBreakdownCard() {
 
 function CashflowCard() {
   return (
-    <div
-      className="shadow-panel"
-      style={{
-        display: 'flex',
-        padding: '20px',
-        flexDirection: 'column',
-        gap: '16px',
-        alignSelf: 'stretch',
-        borderRadius: '18px',
-        background: '#0b0e1a',
-        border: '1px solid #0f111a',
-      }}
-    >
+    <div className="flex max-w-[720px] flex-col items-start gap-4 self-stretch rounded-[16px] bg-[#292A2F] p-[17px]">
       <p className="text-[18px] font-semibold text-white">Cashflow</p>
       <div className="grid sm:grid-cols-2 gap-4 text-[14px]">
         <div className="space-y-1">
