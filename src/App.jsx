@@ -250,13 +250,6 @@ function App() {
               <VaultTabs mode={mode} setMode={setMode} />
               {mode === 'vault' ? (
                 <>
-                  <VaultHero
-                    mode={mode}
-                    section={section}
-                    setSection={setSection}
-                    currency={currency}
-                    setCurrency={setCurrency}
-                  />
                   <div className="lg:hidden">
                     <DepositCard
                       tab={depositTab}
@@ -268,6 +261,13 @@ function App() {
                       onSelectAsset={() => setShowTokenModal(true)}
                     />
                   </div>
+                  <VaultHero
+                    mode={mode}
+                    section={section}
+                    setSection={setSection}
+                    currency={currency}
+                    setCurrency={setCurrency}
+                  />
                   <SectionTabs section={section} onSectionChange={setSection} />
                   {section === 'overview' && <OverviewSection />}
                   {section === 'risk' && <RiskSection />}
