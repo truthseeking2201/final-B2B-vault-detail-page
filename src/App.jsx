@@ -9,6 +9,16 @@ import usdcLogo from './assets/usdc.svg'
 import usdtLogo from './assets/usdt.svg'
 import wbtcLogo from './assets/wbtc.svg'
 
+const ZAP_IN_RATE = 1
+const ZAP_OUT_USDC_RATE = 1
+const ZAP_OUT_SUI_RATE = 1
+
+const parseAmount = (value) => {
+  const n = parseFloat(value)
+  if (Number.isNaN(n) || n < 0) return 0
+  return n
+}
+
 const navLinks = [
   'Trade',
   'Liquidity',
@@ -639,6 +649,12 @@ function DepositCard({
 }) {
   const isWithdraw = tab === 'withdraw'
   const payoutToken = selectedAsset || 'USDC'
+  const [depositAmount, setDepositAmount] = useState('')
+  const [depositReceiveNdlp, setDepositReceiveNdlp] = useState('')
+
+  const [withdrawNdlpAmount, setWithdrawNdlpAmount] = useState('')
+  const [withdrawReceiveUsdc, setWithdrawReceiveUsdc] = useState('')
+  const [withdrawReceiveSui, setWithdrawReceiveSui] = useState('')
 
   return (
     <div className="w-full rounded-[12px] border border-[#2870ff] bg-[#202126] p-[17px] shadow-panel text-white space-y-4">
@@ -653,6 +669,12 @@ function DepositCard({
           payoutToken={payoutToken}
           onSelectAsset={onSelectAsset}
           onDeposit={onDeposit}
+          withdrawNdlpAmount={withdrawNdlpAmount}
+          setWithdrawNdlpAmount={setWithdrawNdlpAmount}
+          withdrawReceiveUsdc={withdrawReceiveUsdc}
+          withdrawReceiveSui={withdrawReceiveSui}
+          setWithdrawReceiveUsdc={setWithdrawReceiveUsdc}
+          setWithdrawReceiveSui={setWithdrawReceiveSui}
         />
       ) : (
         <DepositBody
@@ -660,13 +682,26 @@ function DepositCard({
           payoutToken={payoutToken}
           onSelectAsset={onSelectAsset}
           onDeposit={onDeposit}
+          depositAmount={depositAmount}
+          setDepositAmount={setDepositAmount}
+          depositReceiveNdlp={depositReceiveNdlp}
+          setDepositReceiveNdlp={setDepositReceiveNdlp}
         />
       )}
     </div>
   )
 }
 
-function DepositBody({ zap, payoutToken, onSelectAsset, onDeposit }) {
+function DepositBody({
+  zap,
+  payoutToken,
+  onSelectAsset,
+  onDeposit,
+  depositAmount,
+  setDepositAmount,
+  depositReceiveNdlp,
+  setDepositReceiveNdlp,
+}) {
   return (
     <>
       <div className="space-y-2">
@@ -686,11 +721,20 @@ function DepositBody({ zap, payoutToken, onSelectAsset, onDeposit }) {
 
       {zap ? (
         <SingleDepositInput
-          amount="0.1"
+          amount={depositAmount}
           fiat="$0.20"
           token={payoutToken}
           balance="0.108256258"
           onSelectToken={onSelectAsset}
+          onChangeAmount={(value) => {
+            setDepositAmount(value)
+            if (zap) {
+              const n = parseAmount(value)
+              setDepositReceiveNdlp(value === '' ? '' : (n * ZAP_IN_RATE).toString())
+            } else {
+              setDepositReceiveNdlp('')
+            }
+          }}
         />
       ) : (
         <DualDepositInput
@@ -699,14 +743,30 @@ function DepositBody({ zap, payoutToken, onSelectAsset, onDeposit }) {
         />
       )}
 
-      <ReceiveSection title="Est. Receive" tokens={['NDLP']} />
+      <ReceiveSection
+        title="Est. Receive"
+        tokens={['NDLP']}
+        amounts={{ NDLP: depositReceiveNdlp === '' ? '0.0' : depositReceiveNdlp }}
+      />
       <PrimaryActionButton label="Deposit" onClick={onDeposit} />
     </>
   )
 }
 
 function WithdrawBody({ zap, payoutToken, onSelectAsset, onDeposit }) {
-  const receiveTokens = zap ? [payoutToken] : ['USDC', 'SUI']
+function WithdrawBody({
+  zap,
+  payoutToken,
+  onSelectAsset,
+  onDeposit,
+  withdrawNdlpAmount,
+  setWithdrawNdlpAmount,
+  withdrawReceiveUsdc,
+  withdrawReceiveSui,
+  setWithdrawReceiveUsdc,
+  setWithdrawReceiveSui,
+}) {
+  const receiveTokens = ['USDC', 'SUI']
 
   return (
     <>
@@ -731,7 +791,19 @@ function WithdrawBody({ zap, payoutToken, onSelectAsset, onDeposit }) {
 
       <AmountSection
         title="Withdraw Amount"
-        value="0.1"
+        editable
+        inputValue={withdrawNdlpAmount}
+        onInputChange={(value) => {
+          setWithdrawNdlpAmount(value)
+          if (zap) {
+            const n = parseAmount(value)
+            setWithdrawReceiveUsdc(value === '' ? '' : (n * ZAP_OUT_USDC_RATE).toString())
+            setWithdrawReceiveSui(value === '' ? '' : (n * ZAP_OUT_SUI_RATE).toString())
+          } else {
+            setWithdrawReceiveUsdc('')
+            setWithdrawReceiveSui('')
+          }
+        }}
         fiatHint="$0.20"
         tokenSymbol="NDLP"
         balance="0.108256258"
@@ -741,7 +813,10 @@ function WithdrawBody({ zap, payoutToken, onSelectAsset, onDeposit }) {
       <ReceiveSection
         title="Est. Max Receive"
         tokens={receiveTokens}
-        stacked={!zap}
+        amounts={{
+          USDC: withdrawReceiveUsdc === '' ? '0.0' : withdrawReceiveUsdc,
+          SUI: withdrawReceiveSui === '' ? '0.0' : withdrawReceiveSui,
+        }}
       />
 
       <PrimaryActionButton label="Withdraw" onClick={onDeposit} />
@@ -810,12 +885,19 @@ function SelectorRow({ label, children }) {
   )
 }
 
-function SingleDepositInput({ amount, fiat, token, balance, onSelectToken }) {
+function SingleDepositInput({ amount, fiat, token, balance, onSelectToken, onChangeAmount }) {
   return (
     <div className="rounded-[16px] border border-[#2d3038] bg-white/[0.05] px-4 py-4">
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-[6px]">
-          <p className="text-[36px] leading-[44px] tracking-[-0.04em] text-white">{amount}</p>
+          <input
+            type="number"
+            inputMode="decimal"
+            value={amount}
+            onChange={(e) => onChangeAmount?.(e.target.value)}
+            className="w-full bg-transparent text-[32px] font-semibold leading-none outline-none"
+            placeholder="0.0"
+          />
           <p className="text-[20px] leading-[28px] text-[rgba(133,136,142,0.6)]">{fiat}</p>
         </div>
         <div className="flex flex-col items-end gap-2">
@@ -866,7 +948,18 @@ function DepositField({ amount, fiat, symbol, balance }) {
   )
 }
 
-function AmountSection({ title, value, fiatHint, tokenSymbol, balance, onSelectToken, showActions }) {
+function AmountSection({
+  title,
+  value,
+  fiatHint,
+  tokenSymbol,
+  balance,
+  onSelectToken,
+  showActions,
+  editable,
+  inputValue,
+  onInputChange,
+}) {
   const selectable = Boolean(onSelectToken) && tokenSymbol !== 'NDLP'
 
   return (
@@ -875,7 +968,18 @@ function AmountSection({ title, value, fiatHint, tokenSymbol, balance, onSelectT
       <div className="rounded-[12px] border border-[#2d3038] bg-white/[0.04] px-3 py-3">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-[6px]">
-            <p className="text-[36px] leading-[44px] tracking-[-0.04em] text-white">{value}</p>
+            {editable ? (
+              <input
+                type="number"
+                inputMode="decimal"
+                value={inputValue}
+                onChange={(e) => onInputChange?.(e.target.value)}
+                className="w-full bg-transparent text-[32px] font-semibold leading-none outline-none"
+                placeholder="0.0"
+              />
+            ) : (
+              <p className="text-[36px] leading-[44px] tracking-[-0.04em] text-white">{value}</p>
+            )}
             {fiatHint && (
               <p className="text-[20px] leading-[28px] text-[rgba(133,136,142,0.6)]">{fiatHint}</p>
             )}
@@ -912,25 +1016,33 @@ function AmountSection({ title, value, fiatHint, tokenSymbol, balance, onSelectT
   )
 }
 
-function ReceiveSection({ title, tokens, stacked }) {
+function ReceiveSection({ title, tokens, stacked, amounts }) {
   return (
     <div className="space-y-2">
       <p className="text-base text-white">{title}</p>
       <div className="rounded-[12px] border border-[#2d3038] bg-white/[0.04] px-3 py-3 space-y-3">
-        {stacked ? (
-          tokens.map((token) => <ReceiveRow key={token} token={token} />)
-        ) : (
-          <ReceiveRow token={tokens[0]} />
-        )}
+        {tokens.map((token) => (
+          <ReceiveRow
+            key={token}
+            token={token}
+            amount={amounts?.[token]}
+            compact={stacked}
+          />
+        ))}
       </div>
     </div>
   )
 }
 
-function ReceiveRow({ token }) {
+function ReceiveRow({ token, amount, compact }) {
+  const displayAmount = amount ?? '0.1'
   return (
     <div className="flex items-center justify-between gap-3">
-      <p className="text-[36px] leading-[44px] tracking-[-0.04em] text-white">0.1</p>
+      <p
+        className={`tracking-[-0.04em] text-white ${compact ? 'text-[32px] leading-[40px]' : 'text-[36px] leading-[44px]'}`}
+      >
+        {displayAmount}
+      </p>
       <div className="flex items-center gap-2 text-[18px] font-medium">
         <TokenGlyph symbol={token} size={22} />
         <span>{token}</span>
