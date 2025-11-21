@@ -332,22 +332,25 @@ function Logo() {
 function VaultHeader({ currency, setCurrency }) {
   const toggleButtons = (
     <div className="flex items-center gap-2">
-      {['USD', 'SUI'].map((item) => (
-        <button
-          key={item}
-          onClick={() => setCurrency(item)}
-          style={{
-            padding: '7.25px 16px 7.77px 16px',
-          }}
-          className={`flex items-center rounded-[6px] border text-sm font-semibold transition-colors ${
-            currency === item
-              ? 'border-[#286fff] bg-[rgba(40,112,255,0.3)] text-white'
-              : 'border-border bg-panel text-gray-300 hover:border-primary/60'
-          }`}
-        >
-          {item}
-        </button>
-      ))}
+      {['USD', 'SUI'].map((item) => {
+        const isActive = currency === item
+        return (
+          <button
+            key={item}
+            onClick={() => setCurrency(item)}
+            className={
+              isActive
+                ? 'flex items-center justify-center rounded-[6px] bg-[rgba(40,112,255,0.30)] px-[16px] py-[7.25px] text-[13.2px] leading-[16px] font-medium text-[#7EA9FF]'
+                : 'flex items-center justify-center rounded-full px-3 py-2 text-[13.2px] leading-[16px] font-medium text-[#9096A5]'
+            }
+            style={{
+              fontFamily: 'Work Sans, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+            }}
+          >
+            {item}
+          </button>
+        )
+      })}
     </div>
   )
 
@@ -753,7 +756,6 @@ function DepositBody({
   )
 }
 
-function WithdrawBody({ zap, payoutToken, onSelectAsset, onDeposit }) {
 function WithdrawBody({
   zap,
   payoutToken,
