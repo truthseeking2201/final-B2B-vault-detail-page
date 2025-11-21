@@ -472,18 +472,21 @@ function VaultHero() {
           conditions. We call this the “dual engine.”
         </p>
         <hr className="w-full border-t border-border" />
-        <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+        <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
+          {/* Left: 3 token columns */}
+          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6 lg:w-auto">
             <TokenCluster label="Collateral" token={{ name: 'SUI', color: '#6cd1ff' }} />
             <TokenCluster label="Receipt Token" token={{ name: 'NDLP', color: '#f59f0b' }} />
             <TokenCluster label="Incentive Token" token={{ name: 'XP Shares', color: '#faab3d' }} />
           </div>
-          <div className="flex w-full flex-col gap-1 text-base text-gray-100 lg:w-auto">
-            <div className="flex items-baseline gap-2 text-gray-300 lg:justify-end">
+
+          {/* Right: fee column */}
+          <div className="flex w-full flex-col gap-1 text-base text-gray-100 lg:w-auto lg:text-right">
+            <div className="flex items-baseline gap-2 text-gray-300 lg:justify-end lg:self-end">
               <span className="text-white font-semibold">2%</span>
               <span className="text-gray-400">Management Fee</span>
             </div>
-            <div className="flex items-baseline gap-2 text-gray-300 lg:justify-end">
+            <div className="flex items-baseline gap-2 text-gray-300 lg:justify-end lg:self-end">
               <span className="text-white font-semibold">14.2%</span>
               <span className="text-gray-400">Performance Fee</span>
             </div>
