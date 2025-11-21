@@ -235,8 +235,17 @@ function App() {
       <NavBar />
       <main className="w-full max-w-[1200px] mx-auto px-4 lg:px-6 pb-16">
         <div className="mt-6 flex w-full max-w-[1200px] flex-col items-start self-stretch rounded-[24px] border border-[#1F2937] bg-[#202126] p-6 lg:p-7">
-          <div className="grid lg:grid-cols-[1.6fr,1fr] w-full gap-6 lg:items-start">
-            <div className="space-y-6">
+          <div className="flex items-center gap-2 text-sm text-gray-300">
+            <div className="h-8 w-8 grid place-items-center rounded-full bg-panelMuted border border-border">
+              <ArrowLeft />
+            </div>
+            <span className="text-[24px] leading-[31.92px] font-medium text-[#FAFAFA]">
+              Deposit
+            </span>
+          </div>
+
+          <div className="mt-4 flex w-full flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
+            <div className="space-y-6 flex-1">
               <VaultHeader currency={currency} setCurrency={setCurrency} />
               <VaultTabs mode={mode} setMode={setMode} />
               {mode === 'vault' ? (
@@ -269,7 +278,7 @@ function App() {
                 <PositionsSection />
               )}
             </div>
-            <div className="hidden lg:block lg:sticky lg:top-6 self-start w-full mt-6 lg:mt-0 lg:self-start">
+            <aside className="hidden lg:block lg:sticky lg:top-6 w-full mt-6 lg:mt-0 lg:w-[400px] xl:w-[440px] lg:self-start">
               <DepositCard
                 tab={depositTab}
                 onTabChange={setDepositTab}
@@ -279,7 +288,7 @@ function App() {
                 selectedAsset={selectedAsset}
                 onSelectAsset={() => setShowTokenModal(true)}
               />
-            </div>
+            </aside>
           </div>
         </div>
       </main>
@@ -363,14 +372,6 @@ function Logo() {
 function VaultHeader({ currency, setCurrency }) {
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2 text-sm text-gray-300">
-        <div className="h-8 w-8 grid place-items-center rounded-full bg-panelMuted border border-border">
-          <ArrowLeft />
-        </div>
-        <span className="text-[24px] leading-[31.92px] font-medium text-[#FAFAFA]">
-          Deposit
-        </span>
-      </div>
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-2">
